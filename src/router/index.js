@@ -23,7 +23,7 @@ const routes = [
         name: 'Register',
         component: () => import('@/views/front/RegisterView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 註冊',
+          title: '甲蟲工廠 | 註冊',
           login: false,
           admin: false
         }
@@ -33,11 +33,61 @@ const routes = [
         name: 'Login',
         component: () => import('@/views/front/LoginView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 登入',
+          title: '甲蟲工廠 | 登入',
           login: false,
           admin: false
         }
+      },
+      {
+        path: 'book',
+        name: 'Book',
+        component: () => import('@/views/front/BookView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 飼養攻略',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'settings',
+        name: 'Settings',
+        component: () => import('@/views/front/SettingsView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 會員',
+          login: true,
+          admin: false
+        }
       }
+      // {
+      //   path: 'products/:id',
+      //   name: 'Product',
+      //   component: () => import('@/views/front/ProductView.vue'),
+      //   meta: {
+      //     title: '甲蟲工廠 | 商店',
+      //     login: false,
+      //     admin: false
+      //   }
+      // },
+      // {
+      //   path: 'cart',
+      //   name: 'Cart',
+      //   component: () => import('@/views/front/CartView.vue'),
+      //   meta: {
+      //     title: '甲蟲工廠 | 購物車',
+      //     login: true,
+      //     admin: false
+      //   }
+      // },
+      // {
+      //   path: 'orders',
+      //   name: 'Orders',
+      //   component: () => import('@/views/front/OrdersView.vue'),
+      //   meta: {
+      //     title: '甲蟲工廠 | 訂單',
+      //     login: true,
+      //     admin: false
+      //   }
+      // }
     ]
   },
   // ===== 後台 AdminLayout
@@ -50,7 +100,7 @@ const routes = [
         name: 'AdminHome',
         component: () => import('@/views/admin/HomeView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 管理',
+          title: '甲蟲工廠 | 後台管理',
           login: true,
           admin: true
         }
@@ -60,7 +110,7 @@ const routes = [
         name: 'AdminProducts',
         component: () => import('@/views/admin/ProductsView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 商品管理',
+          title: '甲蟲工廠 | 商品管理',
           login: true,
           admin: true
         }
@@ -70,7 +120,17 @@ const routes = [
         name: 'AdminOrders',
         component: () => import('@/views/admin/OrdersView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 訂單管理',
+          title: '甲蟲工廠 | 訂單管理',
+          login: true,
+          admin: true
+        }
+      },
+      {
+        path: 'members',
+        name: 'AdminMembers',
+        component: () => import('@/views/admin/MembersView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 會員管理',
           login: true,
           admin: true
         }

@@ -85,7 +85,7 @@ const drawer = ref(false)
 // ===== 導覽列項目
 const navItems = computed(() => {
   return [
-    { to: '/strategy', text: '飼養攻略', icon: 'mdi-book-open-variant', show: true },
+    { to: '/book', text: '飼養攻略', icon: 'mdi-book-open-variant', show: true },
     { to: '/register', text: '註冊', icon: 'mdi-account-plus', show: !user.isLogin },
     { to: '/login', text: '登入', icon: 'mdi-login', show: !user.isLogin },
     { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin },

@@ -9,8 +9,8 @@
     <VDivider></VDivider>
 
     <!-- === 導覽列 -->
-    <VList>
-      <VListItem v-for="item in navItems" :key="item.to" :to="item.to" :prepend-icon="item.icon" :title="item.text"></VListItem>
+    <VList nav>
+      <VListItem rounded="xl" v-for="item in navItems" :key="item.to" :to="item.to" :prepend-icon="item.icon" :title="item.text"></VListItem>
     </VList>
   </VNavigationDrawer>
 

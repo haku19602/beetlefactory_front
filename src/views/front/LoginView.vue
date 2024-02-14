@@ -53,7 +53,7 @@ const user = useUserStore()
 const show1 = ref(false)
 
 // ==================== 前端表單驗證 ====================
-// === 定義註冊表單的資料格式
+// === 定義表單驗證規則
 const schema = yup.object({
   account: yup
     .string()
