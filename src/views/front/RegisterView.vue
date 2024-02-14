@@ -1,5 +1,5 @@
 <template>
-  <VContainer>
+  <VContainer class="d-flex align-center">
     <VRow>
 
       <VCol cols="12" md="6" offset-md="3">
@@ -46,12 +46,14 @@ import { ref } from 'vue'
 import validator from 'validator'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-// api
-import { api } from '@/plugins/axios'
 // 路由
 import { useRouter } from 'vue-router'
 // 提示訊息
 import { useSnackbar } from 'vuetify-use-dialog'
+// api composables
+import { useApi } from '@/composables/axios'
+
+const { api } = useApi()
 
 const router = useRouter()
 const createSnackbar = useSnackbar()
@@ -102,7 +104,7 @@ const password = useField('password')
 const passwordConfirm = useField('passwordConfirm')
 // ====================================================
 
-// ===== 表單送出處理函式
+// ===== 註冊表單送出處理函式
 const submit = handleSubmit(async (values) => {
   try {
     await api.post('/users', {
@@ -138,11 +140,15 @@ const submit = handleSubmit(async (values) => {
     })
   }
 })
-
 </script>
+
+<!-- ------------------------------------------------------ -->
 
 <style lang="scss" scoped>
 .card{
   background-color: #F8F4EB;
+}
+.v-container{
+  height: 100%;
 }
 </style>

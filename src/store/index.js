@@ -1,4 +1,9 @@
 // Utilities
 import { createPinia } from 'pinia'
+// 把 pinia 存在 localStorage
+import persistedstate from 'pinia-plugin-persistedstate'
 
-export default createPinia()
+const pinia = createPinia()
+pinia.use(persistedstate)
+
+export default pinia

@@ -1,5 +1,5 @@
 <template>
-  <VContainer>
+  <VContainer class="d-flex align-center">
     <VRow>
 
       <VCol cols="12" md="6" offset-md="3">
@@ -33,15 +33,21 @@ import { ref } from 'vue'
 // 表單驗證套件
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-// api
-import { api } from '@/plugins/axios'
 // 路由
 import { useRouter } from 'vue-router'
 // 提示訊息
 import { useSnackbar } from 'vuetify-use-dialog'
+// api composables
+import { useApi } from '@/composables/axios'
+// user 的 store
+import { useUserStore } from '@/store/user'
+
+const { api } = useApi()
 
 const router = useRouter()
 const createSnackbar = useSnackbar()
+
+const user = useUserStore()
 
 // ===== 密碼顯示切換
 const show1 = ref(false)
@@ -71,14 +77,17 @@ const account = useField('account')
 const password = useField('password')
 // ====================================================
 
-// ===== 表單送出處理函式
+// ===== 登入表單送出處理函式
 const submit = handleSubmit(async (values) => {
   try {
-    await api.post('/users/login', {
+    // 送出表單資料到後端
+    const { data } = await api.post('/users/login', {
       // 要送出的東西，這裡的 key 要跟後端接收的欄位名稱一樣
       account: values.account,
       password: values.password
     })
+    // 登入成功後，把結果丟進 user store 的 login function
+    user.login(data.result) // data 是後端整個回覆，包括是否成功、錯誤訊息、資料，result 是資料
     // 登入成功通知
     createSnackbar({
       text: '登入成功',
@@ -106,11 +115,15 @@ const submit = handleSubmit(async (values) => {
     })
   }
 })
-
 </script>
+
+<!-- ------------------------------------------------------ -->
 
 <style lang="scss" scoped>
 .card{
   background-color: #F8F4EB;
+}
+.v-container{
+  height: 100%;
 }
 </style>

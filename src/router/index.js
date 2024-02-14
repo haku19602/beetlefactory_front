@@ -1,5 +1,6 @@
 // Composables
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, START_LOCATION } from 'vue-router'
+import { useUserStore } from '@/store/user'
 
 const routes = [
   // ===== 前台 FrontLayout
@@ -12,9 +13,9 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/front/HomeView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory'
-          // login: false, // 不用登入也能看
-          // admin: false // 不是管理員也能看
+          title: '甲蟲工廠 BeetleFactory',
+          login: false, // 不用登入也能看
+          admin: false // 不是管理員也能看
         }
       },
       {
@@ -22,9 +23,9 @@ const routes = [
         name: 'Register',
         component: () => import('@/views/front/RegisterView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 註冊'
-          // login: false,
-          // admin: false
+          title: '甲蟲工廠 BeetleFactory | 註冊',
+          login: false,
+          admin: false
         }
       },
       {
@@ -32,13 +33,66 @@ const routes = [
         name: 'Login',
         component: () => import('@/views/front/LoginView.vue'),
         meta: {
-          title: '甲蟲工廠 BeetleFactory | 登入'
-          // login: false,
-          // admin: false
+          title: '甲蟲工廠 BeetleFactory | 登入',
+          login: false,
+          admin: false
+        }
+      }
+    ]
+  },
+  // ===== 後台 AdminLayout
+  {
+    path: '/admin',
+    component: () => import('@/layouts/AdminLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'AdminHome',
+        component: () => import('@/views/admin/HomeView.vue'),
+        meta: {
+          title: '甲蟲工廠 BeetleFactory | 管理',
+          login: true,
+          admin: true
+        }
+      },
+      {
+        path: 'products',
+        name: 'AdminProducts',
+        component: () => import('@/views/admin/ProductsView.vue'),
+        meta: {
+          title: '甲蟲工廠 BeetleFactory | 商品管理',
+          login: true,
+          admin: true
+        }
+      },
+      {
+        path: 'orders',
+        name: 'AdminOrders',
+        component: () => import('@/views/admin/OrdersView.vue'),
+        meta: {
+          title: '甲蟲工廠 BeetleFactory | 訂單管理',
+          login: true,
+          admin: true
         }
       }
     ]
   }
+  // ===== 404 頁面
+  // {
+  //   path: '/404',
+  //   name: 'NotFound',
+  //   component: () => import('@/views/NotFoundView.vue'),
+  //   meta: {
+  //     title: '購物網 | 找不到',
+  //     login: false,
+  //     admin: false
+  //   }
+  // },
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   name: 'All',
+  //   redirect: '/404'
+  // }
 ]
 
 const router = createRouter({
@@ -46,9 +100,34 @@ const router = createRouter({
   routes
 })
 
-// ===== 進到每個路由改 title
+// ===== .afterEach 進到每個路由後改 title
 router.afterEach((to, from) => {
   document.title = to.meta.title
+})
+
+// ===== .beforeEach 進到每個路由前判斷登入狀態
+router.beforeEach(async (to, from, next) => {
+  const user = useUserStore()
+
+  // === 如果是第一次跳轉進入頁面，取得使用者資料
+  if (from === START_LOCATION) {
+    await user.getProfile()
+  }
+
+  // === 登入、管理員狀態判斷
+  if (user.isLogin && ['/register', '/login'].includes(to.path)) {
+    // 如果有登入，要去註冊或登入頁，重新導向回首頁
+    next('/')
+  } else if (to.meta.login && !user.isLogin) {
+    // 如果要去的頁面要登入，但是沒登入，重新導向回登入頁
+    next('/login')
+  } else if (to.meta.admin && !user.isAdmin) {
+    // 如果要去的頁面要管理員，但是不是管理員，重新導向回首頁
+    next('/')
+  } else {
+    // 其他情況，正常進入
+    next()
+  }
 })
 
 export default router
