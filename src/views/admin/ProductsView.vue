@@ -1,13 +1,49 @@
 <template>
   <VContainer>
     <VRow>
+      <!-- ===== 新增商品按鈕 -->
       <VCol cols="12">
         <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
+      </VCol>
+      <!-- ===== 商品列表 -->
+      <VCol cols="10" class="mx-auto">
+        <VDataTableServer
+          v-model:items-per-page="tableItemsPerPage"
+          v-model:sort-by="tableSortBy"
+          v-model:page="tablePage"
+          :items="tableProducts"
+          :headers="tableHeaders"
+          :loading="tableLoading"
+          :items-length="tableItemsLength"
+          :search="tableSearch"
+          @update:items-per-page="tableLoadItems"
+          @update:sort-by="tableLoadItems"
+          @update:page="tableLoadItems">
+          <!-- === 上方插槽 放搜尋功能 -->
+          <template #top>
+            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" class="ma-5 mx-10" variant="underlined"
+              @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
+            </VTextField>
+          </template>
+          <!-- === 指定 image 欄位的顯示方式 -->
+          <!-- [`item.key`]，插槽後面= 可以帶出它的資料，這裡解構出 key item -->
+          <template #[`item.image`]="{ item }">
+            <VImg :src="item.image" height="80px" contain></VImg>
+          </template>
+          <!-- === 指定 sell 欄位的顯示方式 -->
+          <template #[`item.sell`]="{ item }">
+            <VIcon icon="mdi-check" v-if="item.sell" color="primary"></VIcon>
+          </template>
+          <!-- === 指定 edit 欄位的顯示方式 -->
+          <template #[`item.edit`]="{ item }">
+            <VBtn icon="mdi-pencil" variant="text" color="secondary" @click="openDialog(item)"></VBtn>
+          </template>
+        </VDataTableServer>
       </VCol>
     </VRow>
   </VContainer>
 
-  <!-- 新增或編輯商品 跳出的視窗 VDialog -->
+  <!-- ===== 新增或編輯商品 跳出的視窗 VDialog -->
   <VDialog v-model="dialog" persistent width="500px">
     <VForm :disabled="isSubmitting" @submit.prevent="submit">
       <VCard rounded="xl">
@@ -54,12 +90,12 @@ const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
 /*
-  重設 VueFileAgent 上傳的檔案
-  1. 在 <VueFileAgent> 中宣告 ref 屬性 ref="fileAgent"
+1. 在 <VueFileAgent> 中宣告 ref 屬性 ref="fileAgent"
   2. 在 setup 中宣告 fileAgent，代表 VueFileAgent 元件
-  3. 在 closeDialog() 中使用 fileAgent.value.deleteFileRecord() 重設上傳的檔案
-      -> .deleteFileRecord() 是 VueFileAgent 內建的方法
-*/
+  3. 在 closeDialog() 關閉對話框時使用 fileAgent.value.deleteFileRecord() 重設上傳的檔案
+  -> .deleteFileRecord() 是 VueFileAgent 內建的方法
+  */
+// ===== 重設 VueFileAgent 上傳的檔案用的
 const fileAgent = ref(null)
 
 // ===== 表單對話框的開啟狀態
@@ -74,13 +110,15 @@ const categories = ['成蟲', '幼蟲', '標本']
 
 // ===== 打開新增or編輯對話框 function
 const openDialog = (item) => {
+  // 如果有 item，代表是編輯
   if (item) {
     dialogId.value = item._id
-    // name.value.value = item.name
-    // price.value.value = item.price
-    // description.value.value = item.description
-    // category.value.value = item.category
-    // sell.value.value = item.sell
+    name.value.value = item.name
+    price.value.value = item.price
+    stock.value.value = item.stock
+    description.value.value = item.description
+    category.value.value = item.category
+    sell.value.value = item.sell
   } else {
     dialogId.value = ''
   }
@@ -151,7 +189,7 @@ const rawFileRecords = ref([])
 const submit = handleSubmit(async (values) => { // values 是表單各個欄位的值
   // 如果 圖片上傳有錯誤，就不送出
   if (fileRecords.value[0]?.error) return
-  // 如果 新增商品時，如果沒有選擇圖片，就不送出
+  // 如果 新增商品時，沒有選擇圖片，就不送出（編輯商品時，可以不選擇圖片）
   if (dialogId.value === '' && fileRecords.value.length === 0) return
 
   try {
@@ -166,14 +204,14 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
     if (fileRecords.value.length > 0) {
       fd.append('image', fileRecords.value[0].file)
     }
-
-    // 送出 FormData 物件的表單資料到後端
+    // === 送出 FormData 物件的表單資料到後端
     if (dialogId.value === '') {
+      // 如果 dialogId.value 是空的，代表是新增商品，就用 .post() 送出
       await apiAuth.post('/products', fd)
     } else {
+      // 如果 dialogId.value 有值，代表是編輯商品，就用 .patch() 送出
       await apiAuth.patch('/products/' + dialogId.value, fd)
     }
-
     // 新增成功通知
     createSnackbar({
       text: dialogId.value === '' ? '新增成功' : '編輯成功',
@@ -185,7 +223,8 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
       }
     })
     closeDialog()
-    // tableApplySearch()
+    // 重新載入商品列表，而且回到第一頁
+    tableApplySearch()
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
@@ -202,68 +241,81 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
   }
 })
 
-// // 表格每頁幾個
-// const tableItemsPerPage = ref(10)
-// // 表格排序
-// const tableSortBy = ref([
-//   { key: 'createdAt', order: 'desc' }
-// ])
-// // 表格頁碼
-// const tablePage = ref(1)
-// // 表格商品資料陣列
-// const tableProducts = ref([])
-// // 表格欄位設定
-// const tableHeaders = [
-//   { title: '圖片', align: 'center', sortable: false, key: 'image' },
-//   { title: '名稱', align: 'center', sortable: true, key: 'name' },
-//   { title: '價格', align: 'center', sortable: true, key: 'price' },
-//   // { title: '說明', align: 'center', sortable: true, key: 'description' },
-//   { title: '分類', align: 'center', sortable: true, key: 'category' },
-//   { title: '上架', align: 'center', sortable: true, key: 'sell' },
-//   { title: '編輯', align: 'center', sortable: false, key: 'edit' }
-// ]
-// // 表格載入狀態
-// const tableLoading = ref(true)
-// // 表格全部資料數
-// const tableItemsLength = ref(0)
-// // 表格搜尋文字
-// const tableSearch = ref('')
-// // 表格載入資料
-// const tableLoadItems = async () => {
-//   tableLoading.value = true
-//   try {
-//     const { data } = await apiAuth.get('/products/all', {
-//       params: {
-//         page: tablePage.value,
-//         itemsPerPage: tableItemsPerPage.value,
-//         sortBy: tableSortBy.value[0]?.key || 'createdAt',
-//         sortOrder: tableSortBy.value[0]?.order === 'asc' ? 1 : -1,
-//         search: tableSearch.value
-//       }
-//     })
-//     tableProducts.value.splice(0, tableProducts.value.length, ...data.result.data)
-//     tableItemsLength.value = data.result.total
-//   } catch (error) {
-//     console.log(error)
-//     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
-//     createSnackbar({
-//       text,
-//       showCloseButton: false,
-//       snackbarProps: {
-//         timeout: 2000,
-//         color: 'red',
-//         location: 'bottom'
-//       }
-//     })
-//   }
-//   tableLoading.value = false
-// }
-// tableLoadItems()
-// // 表格套用搜尋
-// const tableApplySearch = () => {
-//   tablePage.value = 1
-//   tableLoadItems()
-// }
+// ==================== VDataTableServer 商品列表 ====================
+// === 表格每頁幾個
+const tableItemsPerPage = ref(10)
+// === 表格排序
+const tableSortBy = ref([
+  { key: 'createdAt', order: 'desc' } // 預設以建立時間倒序排列
+])
+// === 表格頁碼
+const tablePage = ref(1)
+// === 表格商品資料陣列 -> 用來顯示目前頁面在表格上
+const tableProducts = ref([])
+// === 表格欄位設定
+// key 是後端回傳的資料 key，用 v-for 自動產生表格
+const tableHeaders = [
+  { title: '圖片', align: 'center', sortable: false, key: 'image' },
+  { title: '品名', align: 'center', sortable: true, key: 'name' },
+  { title: '價格', align: 'center', sortable: true, key: 'price' },
+  // { title: '說明', align: 'center', sortable: true, key: 'description' },
+  { title: '分類', align: 'center', sortable: true, key: 'category' },
+  { title: '庫存', align: 'center', sortable: true, key: 'stock' },
+  { title: '上架', align: 'center', sortable: true, key: 'sell' },
+  { title: '編輯', align: 'center', sortable: false, key: 'edit' } // edit 資料庫中沒有這個欄位，自己新增的欄位
+]
+// === 表格載入狀態
+const tableLoading = ref(true)
+// === 表格全部資料數 -> 用來計算分頁數
+const tableItemsLength = ref(0)
+// === 表格搜尋文字
+const tableSearch = ref('')
+
+// ===== 表格重新載入資料函式，去後端撈資料
+const tableLoadItems = async () => {
+  // --- 載入時顯示載入中
+  tableLoading.value = true
+  try {
+    // .get('請求網址', 送出的body(請求方式可以帶的話), 參數)
+    const { data } = await apiAuth.get('/products/all', {
+      params: {
+        page: tablePage.value,
+        itemsPerPage: tableItemsPerPage.value,
+        sortBy: tableSortBy.value[0]?.key || 'createdAt',
+        sortOrder: tableSortBy.value[0]?.order === 'asc' ? 1 : -1,
+        search: tableSearch.value
+      }
+    })
+    // --- 資料撈回來後，將資料放進 tableProducts
+    tableProducts.value.splice(0, tableProducts.value.length, ...data.result.data)
+    // --- 將全部資料數放進 tableItemsLength
+    tableItemsLength.value = data.result.total
+  } catch (error) {
+    console.log(error)
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 2000,
+        color: 'secondary',
+        location: 'bottom'
+      }
+    })
+  }
+  // --- 載入完成後關閉載入中
+  tableLoading.value = false
+}
+tableLoadItems()
+// ==============================================================
+
+// ===== 送出搜尋時 表格套用搜尋
+const tableApplySearch = () => {
+  // 回到第一頁資料
+  tablePage.value = 1
+  // 重新載入資料
+  tableLoadItems()
+}
 </script>
 
 <!-- ------------------------------------------- -->

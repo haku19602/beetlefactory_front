@@ -28,9 +28,10 @@ import { useUserStore } from '@/store/user'
 const user = useUserStore()
 
 const navItems = [
-  { to: '/', text: '回首頁', icon: 'mdi-home' },
+  { to: '/', text: '回前台首頁', icon: 'mdi-home' },
   { to: '/admin/products', text: '商品管理', icon: 'mdi-shopping' },
-  { to: '/admin/orders', text: '訂單管理', icon: 'mdi-list-box' }
+  { to: '/admin/orders', text: '訂單管理', icon: 'mdi-list-box' },
+  { to: '/admin/members', text: '會員管理', icon: 'mdi-account-group' }
 ]
 
 // const prependAvatar = user.avatar

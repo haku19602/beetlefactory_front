@@ -18,13 +18,13 @@
                 v-model="account.value.value"
                 :error-messages="account.errorMessage.value">
               </VTextField>
-              <VTextField class="pb-3" label="密碼" placeholder="輸入密碼" hint="4~20字"
+              <VTextField class="pb-3" label="密碼" placeholder="請輸入密碼" hint="4~20字"
                 density="compact" variant="outlined" minlength="4" maxlength="20" counter :type="show1 ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline" :append-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'" @click:append="show1 = !show1"
                 v-model="password.value.value"
                 :error-messages="password.errorMessage.value">
               </VTextField>
-              <VTextField class="pb-3" label="確認密碼" placeholder="再次輸入密碼" hint="4~20字"
+              <VTextField class="pb-3" label="確認密碼" placeholder="請再次輸入密碼" hint="4~20字"
                 density="compact" variant="outlined" minlength="4" maxlength="20" counter :type="show2 ? 'text' : 'password'"
                 prepend-inner-icon="mdi-lock-outline" :append-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'" @click:append="show2 = !show2"
                 v-model="passwordConfirm.value.value"

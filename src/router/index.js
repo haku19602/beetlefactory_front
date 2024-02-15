@@ -49,11 +49,21 @@ const routes = [
         }
       },
       {
-        path: 'settings',
-        name: 'Settings',
-        component: () => import('@/views/front/SettingsView.vue'),
+        path: 'shop',
+        name: 'Shop',
+        component: () => import('@/views/front/ShopView.vue'),
         meta: {
-          title: '甲蟲工廠 | 會員',
+          title: '甲蟲工廠 | 商店',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'member',
+        name: 'Member',
+        component: () => import('@/views/front/MemberView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 我的',
           login: true,
           admin: false
         }
@@ -63,7 +73,7 @@ const routes = [
       //   name: 'Product',
       //   component: () => import('@/views/front/ProductView.vue'),
       //   meta: {
-      //     title: '甲蟲工廠 | 商店',
+      //     title: '甲蟲工廠 | 商品',
       //     login: false,
       //     admin: false
       //   }
@@ -74,16 +84,6 @@ const routes = [
       //   component: () => import('@/views/front/CartView.vue'),
       //   meta: {
       //     title: '甲蟲工廠 | 購物車',
-      //     login: true,
-      //     admin: false
-      //   }
-      // },
-      // {
-      //   path: 'orders',
-      //   name: 'Orders',
-      //   component: () => import('@/views/front/OrdersView.vue'),
-      //   meta: {
-      //     title: '甲蟲工廠 | 訂單',
       //     login: true,
       //     admin: false
       //   }
