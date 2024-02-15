@@ -119,7 +119,7 @@ const submit = handleSubmit(async (values) => {
       showCloseButton: false,
       snackbarProps: {
         timeout: 2000,
-        color: 'primary',
+        color: 'back',
         location: 'bottom'
       }
     })
