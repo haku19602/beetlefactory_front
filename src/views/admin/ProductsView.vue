@@ -187,7 +187,7 @@ const rawFileRecords = ref([])
 
 // ===== 新增or編輯 表單送出處理函式
 const submit = handleSubmit(async (values) => { // values 是表單各個欄位的值
-  // 如果 圖片上傳有錯誤，就不送出
+  // 如果 圖片上傳有錯誤，就不送出  // 沒上傳圖片就沒有 value[0]，value[0] 是 undefined，undefined 沒有 .error 所以要用 ?. 避免錯誤
   if (fileRecords.value[0]?.error) return
   // 如果 新增商品時，沒有選擇圖片，就不送出（編輯商品時，可以不選擇圖片）
   if (dialogId.value === '' && fileRecords.value.length === 0) return
@@ -200,7 +200,7 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
     for (const key in values) {
       fd.append(key, values[key])
     }
-    // 如果有選擇圖片，就放進 FormData
+    // === 如果有選擇圖片，就放進 FormData
     if (fileRecords.value.length > 0) {
       fd.append('image', fileRecords.value[0].file)
     }
@@ -223,8 +223,7 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
       }
     })
     closeDialog()
-    // 重新載入商品列表，而且回到第一頁
-    tableApplySearch()
+    tableApplySearch() // 重新載入商品列表，而且回到第一頁 -> 剛好可以套用搜尋功能的重新載入
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
