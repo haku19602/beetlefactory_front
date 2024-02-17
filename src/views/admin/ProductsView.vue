@@ -36,12 +36,29 @@
           </template>
           <!-- === 指定 edit 欄位的顯示方式 -->
           <template #[`item.edit`]="{ item }">
-            <VBtn icon="mdi-pencil" variant="text" color="secondary" @click="openDialog(item)"></VBtn>
+            <VBtn icon="mdi-pencil" variant="text" color="primary" @click="openDialog(item)"></VBtn>
+          </template>
+          <!-- === 指定 remove 欄位的顯示方式 -->
+          <template #[`item.remove`]="{ item }">
+            <VBtn icon="mdi-delete" variant="text" color="secondary" @click="openDialogRemove(item)"></VBtn>
           </template>
         </VDataTableServer>
       </VCol>
     </VRow>
   </VContainer>
+
+  <!-- ===== 刪除商品確認視窗 -->
+  <VDialog v-model="dialogRemove" width="300px">
+    <VCard rounded="xl">
+      <VIcon icon="mdi-alert-circle" color="secondary" size="50" class="ma-auto mt-5"></VIcon>
+      <VCardText>確定要刪除「{{ name.value.value }}」嗎？此動作無法復原！</VCardText>
+      <VCardActions>
+        <VSpacer></VSpacer>
+        <VBtn color="primary" rounded @click="closeDialogRemove">取消</VBtn>
+        <VBtn color="secondary" rounded @click="remove">確認刪除</VBtn>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 
   <!-- ===== 新增或編輯商品 跳出的視窗 VDialog -->
   <VDialog v-model="dialog" persistent width="500px">
@@ -71,7 +88,7 @@
         <VCardActions>
           <VSpacer></VSpacer>
           <VBtn color="secondary" rounded :disabled="isSubmitting" @click="closeDialog">取消</VBtn>
-          <VBtn color="primary" rounded type="submit" :loading="isSubmitting">新增</VBtn>
+          <VBtn color="primary" rounded type="submit" :loading="isSubmitting">送出</VBtn>
         </VCardActions>
       </VCard>
     </VForm>
@@ -100,6 +117,7 @@ const fileAgent = ref(null)
 
 // ===== 表單對話框的開啟狀態
 const dialog = ref(false)
+const dialogRemove = ref(false)
 
 // ===== 判斷表單對話框為新增或編輯
 // 表單對話框正在編輯的商品 ID，空的話代表是新增商品
@@ -108,9 +126,9 @@ const dialogId = ref('')
 // ===== 商品分類
 const categories = ['成蟲', '幼蟲', '標本']
 
-// ===== 打開新增or編輯對話框 function
+// ===== 打開 新增or編輯對話框 function
 const openDialog = (item) => {
-  // 如果有 item，代表是編輯
+  // 如果有 item，代表是編輯，就把目前 item 的資料放進表單
   if (item) {
     dialogId.value = item._id
     name.value.value = item.name
@@ -120,18 +138,30 @@ const openDialog = (item) => {
     category.value.value = item.category
     sell.value.value = item.sell
   } else {
+    // 如果沒有 item，代表是新增，就重置表單
     dialogId.value = ''
   }
   dialog.value = true
 }
 
-// ===== 關閉對話框 function
+// ===== 關閉 新增or編輯對話框 function
 const closeDialog = () => {
   dialog.value = false // 關閉對話框
   resetForm() // 重置表單
   fileAgent.value.deleteFileRecord() // 重設上傳的檔案
 }
 
+// ===== 打開 確認刪除對話框 function
+const openDialogRemove = (item) => {
+  dialogId.value = item._id
+  name.value.value = item.name
+  dialogRemove.value = true
+}
+
+// ===== 關閉 確認刪除對話框 function
+const closeDialogRemove = () => {
+  dialogRemove.value = false
+}
 // ==================== 前端表單驗證 ====================
 // === 定義表單驗證規則
 const schema = yup.object({
@@ -184,6 +214,36 @@ const sell = useField('sell')
 const fileRecords = ref([])
 const rawFileRecords = ref([])
 // ====================================================
+
+// ===== 刪除商品 function
+const remove = async () => {
+  try {
+    await apiAuth.delete('/products/' + dialogId.value)
+    createSnackbar({
+      text: '刪除成功',
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 2000,
+        color: 'back',
+        location: 'bottom'
+      }
+    })
+    closeDialogRemove()
+    tableLoadItems() // 重新載入商品列表
+  } catch (error) {
+    console.log(error)
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 2000,
+        color: 'secondary',
+        location: 'bottom'
+      }
+    })
+  }
+}
 
 // ===== 新增or編輯 表單送出處理函式
 const submit = handleSubmit(async (values) => { // values 是表單各個欄位的值
@@ -261,7 +321,8 @@ const tableHeaders = [
   { title: '分類', align: 'center', sortable: true, key: 'category' },
   { title: '庫存', align: 'center', sortable: true, key: 'stock' },
   { title: '上架', align: 'center', sortable: true, key: 'sell' },
-  { title: '編輯', align: 'center', sortable: false, key: 'edit' } // edit 資料庫中沒有這個欄位，自己新增的欄位
+  { title: '編輯', align: 'center', sortable: false, key: 'edit' }, // edit 資料庫中沒有這個欄位，自己新增的欄位
+  { title: '刪除', align: 'center', sortable: false, key: 'remove' } // delete 資料庫中沒有這個欄位，自己新增的欄位
 ]
 // === 表格載入狀態
 const tableLoading = ref(true)

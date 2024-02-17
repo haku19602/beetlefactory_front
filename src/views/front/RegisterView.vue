@@ -14,7 +14,7 @@
                 :error-messages="email.errorMessage.value">
               </VTextField>
               <VTextField class="pb-3" label="帳號" placeholder="User name" hint="4~20字 英文或數字"
-                density="compact" variant="outlined" minlength="4" maxlength="20" counter  prepend-inner-icon="mdi-account-outline"
+                density="compact" variant="outlined" minlength="4" maxlength="20" counter prepend-inner-icon="mdi-account-outline"
                 v-model="account.value.value"
                 :error-messages="account.errorMessage.value">
               </VTextField>

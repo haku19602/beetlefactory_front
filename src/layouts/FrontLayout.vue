@@ -1,6 +1,6 @@
 <template>
   <!-- ===== 手機版右側欄 -->
-  <VNavigationDrawer v-model="drawer" temporary location="right" v-if="isMobile" color="primary">
+  <VNavigationDrawer v-model="drawer" temporary location="right" v-if="isMobile" color="primary" class="pa-3">
     <VList nav>
       <!-- 每個項目 VListItem -->
       <template v-for="item in navItemsLeft" :key="item.to">
@@ -40,7 +40,7 @@
 
       <!-- 登出按鈕 VListItem -->
       <VListItem v-if="user.isLogin" rounded="xl" @click="logout">
-        <template v-slot:prepend>
+        <template>
             <v-icon icon="mdi-logout"></v-icon>
         </template>
         <VListItemTitle>登出</VListItemTitle>
@@ -122,7 +122,7 @@ const navItemsRight = computed(() => {
   return [
     { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin },
     { to: '/member', text: '我的', icon: 'mdi-account', show: user.isLogin },
-    { to: '/admin', text: '後台管理', icon: 'mdi-cog', show: user.isLogin && user.isAdmin }
+    { to: '/admin', text: '管理員', icon: 'mdi-cog', show: user.isLogin && user.isAdmin }
   ]
 })
 // ===== 導覽列項目-註冊登入

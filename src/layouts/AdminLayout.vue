@@ -1,20 +1,25 @@
 <template>
-  <!-- ===== 左側固定欄 -->
-  <VNavigationDrawer permanent>
+  <!-- ========== 左側固定欄 -->
+  <VNavigationDrawer permanent class="pa-3">
     <!-- === 使用者資訊 -->
     <VList>
-      <VListItem :prepend-avatar="user.avatar" :title="user.account"></VListItem>
+      <VListItem :prepend-avatar="user.avatar" :title="user.account" :subtitle="user.email"></VListItem>
     </VList>
 
     <VDivider></VDivider>
+    <!-- === 回前台 -->
+    <VList nav>
+      <VListItem rounded="xl" to="/" prepend-icon="mdi-home" title="回前台首頁"></VListItem>
+    </VList>
 
+    <VDivider></VDivider>
     <!-- === 導覽列 -->
     <VList nav>
       <VListItem rounded="xl" v-for="item in navItems" :key="item.to" :to="item.to" :prepend-icon="item.icon" :title="item.text"></VListItem>
     </VList>
   </VNavigationDrawer>
 
-  <!-- ===== 左側頁面內容 -->
+  <!-- ========== 右側頁面內容 -->
   <VMain>
     <!-- 對應到路由設定的子層 -->
     <RouterView></RouterView>
@@ -28,7 +33,6 @@ import { useUserStore } from '@/store/user'
 const user = useUserStore()
 
 const navItems = [
-  { to: '/', text: '回前台首頁', icon: 'mdi-home' },
   { to: '/admin/products', text: '商品管理', icon: 'mdi-shopping' },
   { to: '/admin/orders', text: '訂單管理', icon: 'mdi-list-box' },
   { to: '/admin/members', text: '會員管理', icon: 'mdi-account-group' }
