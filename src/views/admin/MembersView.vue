@@ -32,7 +32,7 @@
           </template>
           <!-- === 指定 role 欄位的顯示方式 -->
           <template #[`item.role`]="{ item }">
-            <VIcon icon="mdi-check" v-if="item.role = 1 " color="primary"></VIcon>
+            <VIcon icon="mdi-check" v-if="item.role == 1 " color="primary"></VIcon>
           </template>
           <!-- === 指定 edit 欄位的顯示方式 -->
           <template #[`item.edit`]="{ item }">
@@ -77,7 +77,7 @@
           </VRadioGroup>
           <VueFileAgent v-model="fileRecords" v-model:rawModelValue="rawFileRecords"
             accept="image/jpeg,image/png" max-size="2MB" :error-text="{type: '檔案格式不支援，只接受 .jpeg .png', size: '檔案超過 2MB 大小限制'}"
-            deletable help-text="選擇檔案或拖曳到這裡" :max-files="1" ref="fileAgent"
+            deletable help-text="選擇大頭貼圖片或拖曳到這裡" :max-files="1" ref="fileAgent"
             ></VueFileAgent>
         </VCardText>
 
@@ -189,7 +189,7 @@ const fileRecords = ref([])
 const rawFileRecords = ref([])
 // ====================================================
 
-// ===== 刪除商品 function
+// ===== 刪除使用者 function
 const remove = async () => {
   try {
     await apiAuth.delete('/users/' + dialogId.value)
@@ -203,7 +203,7 @@ const remove = async () => {
       }
     })
     closeDialogRemove()
-    tableLoadItems() // 重新載入商品列表
+    tableLoadItems() // 重新載入使用者列表
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
