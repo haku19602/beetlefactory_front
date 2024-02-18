@@ -1,7 +1,8 @@
 <template>
-  <VCard elevation="0" rounded="xl">
+  <VCard elevation="0" rounded="xl" class="product-card">
     <RouterLink :to="'/products/' + _id">
-      <VImg :src="image" cover height="400"></VImg>
+      <!-- aspect-ratio="1" 寬度是高度的 1倍 -->
+      <VImg :src="image" cover aspect-ratio="1"></VImg>
     </RouterLink>
     <VCardText class="d-flex justify-space-between">
       {{ name }}

@@ -2,7 +2,7 @@
   <VContainer>
     <VRow>
       <VCol cols="12">
-        <h2>商品</h2>
+        <h2 class="text-center text-back">商品</h2>
       </VCol>
 
       <VCol cols="12" md="6" lg="4" v-for="product in products" :key="product._id">
@@ -40,8 +40,12 @@ onMounted(async () => { // 不用 onMounted 的話，就是在 created 的生命
     // === 等待 vue 重新渲染頁面
     await nextTick() // data 更新後不會立即渲染 DOM
     // === gsap 動畫
-    // gsap
-    //   .to('.product-card', { opacity: 1, duration: 0.5 })
+    gsap.from('.product-card', {
+      y: 60,
+      autoAlpha: 0,
+      duration: 0.7,
+      ease: 'linear'
+    })
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
