@@ -1,9 +1,9 @@
 <template>
-  <VContainer class="d-flex align-center">
+  <VContainer class="d-flex align-center" style="height: 90%;">
     <VRow>
 
       <VCol cols="12" md="6" offset-md="3">
-        <VCard class="mx-auto pa-8 pb-8 card" elevation="8" max-width="448" rounded="xl" align-self="center">
+        <VCard class="mx-auto pa-8 pb-8 bg-back" elevation="8" max-width="448" rounded="xl" align-self="center">
           <VCardTitle class="pb-5">登入</VCardTitle>
           <VCardText>
             <VForm :disabled="isSubmitting" @submit.prevent="submit">
@@ -120,10 +120,4 @@ const submit = handleSubmit(async (values) => {
 <!-- ------------------------------------------------------ -->
 
 <style lang="scss" scoped>
-.card{
-  background-color: #F8F4EB;
-}
-.v-container{
-  height: 100%;
-}
 </style>
