@@ -1,8 +1,8 @@
 <template>
-  <VContainer style="height: 90%; background: white;">
-    <VRow class="justify-center align-center" style="height: 100%; background: papayawhip;" >
-      <!-- 紅色精靈 -->
-      <VCol cols="12" md="3" class="d-flex justify-center" style="background: white;">
+  <VContainer style="height: 90%;">
+    <VRow class="justify-center align-center" style="height: 100%;" >
+      <!-- ===== 紅色精靈 -->
+      <VCol cols="12" lg="3" class="d-flex justify-center">
         <div class="red-square d-flex justify-space-evenly align-center">
           <div class="eyes-white">
             <div class="eyes-black"></div>
@@ -12,9 +12,14 @@
           </div>
         </div>
       </VCol>
-
-      <!-- logo 主視覺 -->
-      <VCol cols="12" md="7" style="background: gainsboro;">
+      <!-- ===== 主視覺 -->
+      <VCol cols="12" lg="7" class="d-flex justify-center align-center">
+        <div class="key_vision">
+          <img src="@//assets/kv_beetle.png" class="kv_beetle">
+          <img src="@//assets/kv_redbeetle.png" class="kv_redbeetle">
+          <img src="@//assets/kv_factory.png" class="kv_factory">
+          <div class="o"></div>
+        </div>
       </VCol>
     </VRow>
   </VContainer>
@@ -24,8 +29,8 @@
 import { onMounted } from 'vue'
 import gsap from 'gsap'
 
-// ===== 眼珠動畫
 onMounted(() => {
+  // ===== 眼珠動畫
   gsap.from('.eyes-black', {
     top: '35%',
     left: '15%',
@@ -33,7 +38,16 @@ onMounted(() => {
     repeat: -1,
     yoyo: true,
     ease: 'linear',
-    repeatDelay: 0.5
+    repeatDelay: 0.3
+  })
+  // ===== O 彈跳動畫
+  gsap.from('.o', {
+    bottom: '150px',
+    duration: 1,
+    repeat: -1,
+    yoyo: true
+    // ease: 'linear',
+    // repeatDelay: 0.5
   })
 })
 </script>
@@ -58,10 +72,42 @@ onMounted(() => {
   width: 30px;
   height: 30px;
   border-radius: 100%;
-  background: #000;
+  background: #333;
   // ---
   position: absolute;
   top: 15%;
   left: 50%;
+}
+// ===========
+.key_vision{
+  width: 650px;
+  height: 500px;
+  background-color: #818B76;
+  position: relative;
+}
+.kv_beetle{
+  width: 545px;
+  position: absolute;
+  top: 95px;
+}
+.kv_redbeetle{
+  width: 390px;
+  position: absolute;
+}
+.kv_factory{
+  width: 650px;
+  position: absolute;
+  bottom: 45px;
+}
+.o{
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  background-color: #EEAE8E;
+  // ----
+  position: absolute;
+  left: 360px;
+  bottom: 85px;
+
 }
 </style>
