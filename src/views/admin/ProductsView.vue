@@ -1,6 +1,10 @@
 <template>
   <VContainer>
     <VRow>
+      <!-- ===== title -->
+      <VCol cols="12">
+        <h2 class="text-center mt-5">商品列表</h2>
+      </VCol>
       <!-- ===== 新增商品按鈕 -->
       <VCol cols="12">
         <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
@@ -18,10 +22,10 @@
           :search="tableSearch"
           @update:items-per-page="tableLoadItems"
           @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems">
+          @update:page="tableLoadItems" class="py-5 px-10">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
-            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" class="ma-5 mx-10" variant="underlined"
+            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
               @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
             </VTextField>
           </template>
@@ -81,7 +85,7 @@
             v-model="description.value.value" :error-messages="description.errorMessage.value"></VTextarea>
           <VueFileAgent v-model="fileRecords" v-model:rawModelValue="rawFileRecords"
             accept="image/jpeg,image/png" max-size="2MB" :error-text="{type: '檔案格式不支援，只接受 .jpeg .png', size: '檔案超過 2MB 大小限制'}"
-            deletable help-text="選擇檔案或拖曳到這裡" :max-files="1" ref="fileAgent"
+            deletable help-text="選擇商品圖片或拖曳到這裡" :max-files="1" ref="fileAgent"
             ></VueFileAgent>
         </VCardText>
 
@@ -272,7 +276,7 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
       // 如果 dialogId.value 有值，代表是編輯商品，就用 .patch() 送出
       await apiAuth.patch('/products/' + dialogId.value, fd)
     }
-    // 新增成功通知
+    // 成功通知
     createSnackbar({
       text: dialogId.value === '' ? '新增成功' : '編輯成功',
       showCloseButton: false,
@@ -287,7 +291,7 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
-    // 新增失敗通知
+    // 失敗通知
     createSnackbar({
       text,
       showCloseButton: false,

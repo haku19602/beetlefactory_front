@@ -1,9 +1,9 @@
 <template>
   <VContainer>
     <VRow>
-      <!-- ===== 新增使用者按鈕 -->
+      <!-- ===== title -->
       <VCol cols="12">
-        <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增使用者</VBtn>
+        <h2 class="text-center mt-5">會員列表</h2>
       </VCol>
       <!-- ===== 商品列表 -->
       <VCol cols="10" class="mx-auto">
@@ -18,10 +18,10 @@
           :search="tableSearch"
           @update:items-per-page="tableLoadItems"
           @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems">
+          @update:page="tableLoadItems" class="py-5 px-10">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
-            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" class="ma-5 mx-10" variant="underlined"
+            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
               @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
             </VTextField>
           </template>
@@ -32,7 +32,7 @@
           </template>
           <!-- === 指定 role 欄位的顯示方式 -->
           <template #[`item.role`]="{ item }">
-            <VIcon icon="mdi-check" v-if="item.role == 1 " color="primary"></VIcon>
+            <VIcon icon="mdi-check" v-if="item.role === 1 " color="primary"></VIcon>
           </template>
           <!-- === 指定 edit 欄位的顯示方式 -->
           <template #[`item.edit`]="{ item }">
@@ -47,11 +47,11 @@
     </VRow>
   </VContainer>
 
-  <!-- ===== 刪除商品確認視窗 -->
+  <!-- ===== 刪除使用者確認視窗 -->
   <VDialog v-model="dialogRemove" width="300px">
     <VCard rounded="xl">
       <VIcon icon="mdi-alert-circle" color="secondary" size="50" class="ma-auto mt-5"></VIcon>
-      <VCardText>確定要刪除「{{ account.value.value }}」嗎？此動作無法復原！</VCardText>
+      <VCardText>確定要刪除「{{ account.value.value }}」嗎？ <br> 此動作無法復原！</VCardText>
       <VCardActions>
         <VSpacer></VSpacer>
         <VBtn color="primary" rounded @click="closeDialogRemove">取消</VBtn>
@@ -60,11 +60,11 @@
     </VCard>
   </VDialog>
 
-  <!-- ===== 新增或編輯使用者 跳出的視窗 VDialog -->
+  <!-- ===== 編輯使用者 跳出的視窗 VDialog -->
   <VDialog v-model="dialog" persistent width="500px">
     <VForm :disabled="isSubmitting" @submit.prevent="submit">
       <VCard rounded="xl">
-        <VCardTitle class="text-center mt-3 pb-0">{{ dialogId === '' ? '新增使用者' : '編輯使用者' }}</VCardTitle>
+        <VCardTitle class="text-center mt-3 pb-0">編輯使用者</VCardTitle>
 
         <VCardText>
           <VTextField label="帳號" variant="outlined" density="compact" class="pb-3" minlength="4" maxlength="20" counter
@@ -72,8 +72,8 @@
           <VTextField label="信箱" variant="outlined" density="compact" type="email" min="0" class="pb-3"
             v-model="email.value.value" :error-messages="email.errorMessage.value"></VTextField>
           <VRadioGroup v-model="role.value.value" :error-messages="role.errorMessage.value" inline>
-            <VRadio label="一般會員" :value="0" density="compact"></VRadio>
-            <VRadio label="管理員" :value="1" density="compact"></VRadio>
+            <VRadio label="一般會員" :value="0"></VRadio>
+            <VRadio label="管理員" :value="1"></VRadio>
           </VRadioGroup>
           <VueFileAgent v-model="fileRecords" v-model:rawModelValue="rawFileRecords"
             accept="image/jpeg,image/png" max-size="2MB" :error-text="{type: '檔案格式不支援，只接受 .jpeg .png', size: '檔案超過 2MB 大小限制'}"
@@ -219,7 +219,7 @@ const remove = async () => {
   }
 }
 
-// ===== 新增or編輯 表單送出處理函式
+// ===== 編輯表單送出處理函式
 const submit = handleSubmit(async (values) => { // values 是表單各個欄位的值
   // 如果 圖片上傳有錯誤，就不送出  // 沒上傳圖片就沒有 value[0]，value[0] 是 undefined，undefined 沒有 .error 所以要用 ?. 避免錯誤
   if (fileRecords.value[0]?.error) return
@@ -239,16 +239,11 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
       fd.append('image', fileRecords.value[0].file)
     }
     // === 送出 FormData 物件的表單資料到後端
-    if (dialogId.value === '') {
-      // 如果 dialogId.value 是空的，代表是新增商品，就用 .post() 送出
-      await apiAuth.post('/users', fd)
-    } else {
-      // 如果 dialogId.value 有值，代表是編輯商品，就用 .patch() 送出
-      await apiAuth.patch('/users/' + dialogId.value, fd)
-    }
-    // 新增成功通知
+    // 如果 dialogId.value 有值，代表是編輯使用者，就用 .patch() 送出
+    await apiAuth.patch('/users/' + dialogId.value, fd)
+    // 成功通知
     createSnackbar({
-      text: dialogId.value === '' ? '新增成功' : '編輯成功',
+      text: '編輯成功',
       showCloseButton: false,
       snackbarProps: {
         timeout: 2000,
@@ -261,7 +256,7 @@ const submit = handleSubmit(async (values) => { // values 是表單各個欄位�
   } catch (error) {
     console.log(error)
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
-    // 新增失敗通知
+    // 失敗通知
     createSnackbar({
       text,
       showCloseButton: false,
