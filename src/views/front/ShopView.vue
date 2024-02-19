@@ -5,7 +5,7 @@
         <h2 class="text-center text-back">商品</h2>
       </VCol>
 
-      <VCol cols="12" md="6" lg="4" v-for="product in products" :key="product._id">
+      <VCol cols="6" lg="4" v-for="product in products" :key="product._id">
         <!-- 商品卡片寫成元件傳入 -->
         <ProductCard v-bind="product"></ProductCard>
       </VCol>
@@ -39,12 +39,13 @@ onMounted(async () => { // 不用 onMounted 的話，就是在 created 的生命
     products.value.push(...data.result.data)
     // === 等待 vue 重新渲染頁面
     await nextTick() // data 更新後不會立即渲染 DOM
-    // === gsap 動畫
+    // === 商品卡片出場動畫
     gsap.from('.product-card', {
-      y: 60,
-      autoAlpha: 0,
-      duration: 0.7,
-      ease: 'linear'
+      y: 80,
+      // opacity: 0,
+      duration: 1.2,
+      ease: 'linear',
+      stagger: 0.2
     })
   } catch (error) {
     console.log(error)

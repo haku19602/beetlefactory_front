@@ -38,11 +38,11 @@ onMounted(() => {
     repeat: -1,
     yoyo: true,
     ease: 'linear',
-    repeatDelay: 0.3
+    repeatDelay: 0.5
   })
   // ===== O 彈跳動畫
   gsap.from('.o', {
-    bottom: '150px',
+    bottom: '85px',
     duration: 1,
     repeat: -1,
     yoyo: true
@@ -107,7 +107,7 @@ onMounted(() => {
   // ----
   position: absolute;
   left: 360px;
-  bottom: 85px;
+  bottom: 140px;
 
 }
 </style>

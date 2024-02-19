@@ -5,7 +5,7 @@
       <VCol cols="12">
         <h2 class="text-center mt-5">會員列表</h2>
       </VCol>
-      <!-- ===== 商品列表 -->
+      <!-- ===== 會員列表 -->
       <VCol cols="10" class="mx-auto">
         <VDataTableServer
           v-model:items-per-page="tableItemsPerPage"

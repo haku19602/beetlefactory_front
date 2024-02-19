@@ -2,7 +2,7 @@
   <!-- ===== 手機版右側欄 -->
   <VNavigationDrawer v-model="drawer" temporary location="right" v-if="isMobile" color="primary" class="pa-3">
     <VList nav>
-      <!-- 每個項目 VListItem -->
+      <!-- 左側 VListItem -->
       <template v-for="item in navItemsLeft" :key="item.to">
         <VListItem :to="item.to" rounded="xl" v-if="item.show">
           <!-- icon -->
@@ -16,11 +16,15 @@
 
       <VDivider class="my-3"></VDivider>
 
-      <!-- 個人頁按鈕 -->
+      <!-- 右側 VListItem -->
       <template v-for="item in navItemsRight" :key="item.to">
         <VListItem :to="item.to" rounded="xl" v-if="item.show">
           <template v-slot:prepend>
             <v-icon :icon="item.icon"></v-icon>
+          </template>
+          <!-- 購物車數量 icon -->
+          <template v-slot:append>
+            <VBadge color="secondary" :content="user.cart" v-if="item.to === '/cart'" inline></VBadge>
           </template>
           <VListItemTitle>{{ item.text }}</VListItemTitle>
         </VListItem>
@@ -68,13 +72,19 @@
       </template>
       <!-- 2. 電腦版導覽列 -->
       <template v-else>
+        <!-- 左 nav -->
         <template v-for="item in navItemsLeft" :key="item.to">
           <VBtn :to="item.to" :prepend-icon="item.icon" rounded="xl" v-if="item.show">{{ item.text }}</VBtn>
         </template>
         <VSpacer></VSpacer>
+        <!-- 右 nav -->
         <template v-for="item in navItemsRight" :key="item.to">
-          <VBtn :to="item.to" :prepend-icon="item.icon" rounded="xl" v-if="item.show">{{ item.text }}</VBtn>
+          <VBtn :to="item.to" :prepend-icon="item.icon" rounded="xl" v-if="item.show">{{ item.text }}
+            <!-- 購物車數量 VBadge -->
+            <VBadge color="secondary" :content="user.cart" v-if="item.to === '/cart'" floating></VBadge>
+          </VBtn>
         </template>
+        <!-- 登入註冊按鈕 -->
         <template v-for="item in navItemsSign" :key="item.to">
           <VBtn :to="item.to" :prepend-icon="item.icon" color="warning" rounded="xl" variant="outlined" class="sign" v-if="item.show">{{ item.text }}</VBtn>
         </template>

@@ -11,7 +11,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const account = ref('')
   const email = ref('')
-  const cart = ref(0)
+  const cart = ref(0) // 購物車商品總數量
   const role = ref(UserRole.USER)
   const avatar = ref('')
 
