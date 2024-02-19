@@ -1,12 +1,13 @@
 <template>
+<div style="background: #F8F4EB; height: 100%;">
   <VContainer>
     <VRow>
       <!-- ===== title -->
       <VCol cols="12">
-        <h2 class="text-center mt-5">商品列表</h2>
+        <h2 class="text-center mt-5 text-primary">商品列表</h2>
       </VCol>
       <!-- ===== 新增商品按鈕 -->
-      <VCol cols="12">
+      <VCol cols="12" class="ps-12 ms-12">
         <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
       </VCol>
       <!-- ===== 商品列表 -->
@@ -97,6 +98,7 @@
       </VCard>
     </VForm>
   </VDialog>
+</div>
 </template>
 <!-- ------------------------------------------- -->
 <script setup>

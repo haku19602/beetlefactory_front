@@ -82,7 +82,7 @@ onMounted(() => {
 .key_vision{
   width: 650px;
   height: 500px;
-  background-color: #818B76;
+  // background-color: #818B76;
   position: relative;
 }
 .kv_beetle{

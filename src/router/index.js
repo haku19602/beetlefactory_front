@@ -67,17 +67,17 @@ const routes = [
           login: true,
           admin: false
         }
+      },
+      {
+        path: 'products/:id',
+        name: 'Product',
+        component: () => import('@/views/front/ProductEach.vue'),
+        meta: {
+          title: '甲蟲工廠 | 商品',
+          login: false,
+          admin: false
+        }
       }
-      // {
-      //   path: 'products/:id',
-      //   name: 'Product',
-      //   component: () => import('@/views/front/ProductView.vue'),
-      //   meta: {
-      //     title: '甲蟲工廠 | 商品',
-      //     login: false,
-      //     admin: false
-      //   }
-      // },
       // {
       //   path: 'cart',
       //   name: 'Cart',

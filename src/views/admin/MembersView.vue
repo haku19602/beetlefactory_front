@@ -1,9 +1,10 @@
 <template>
+<div style="background: #F8F4EB; height: 100%;">
   <VContainer>
     <VRow>
       <!-- ===== title -->
       <VCol cols="12">
-        <h2 class="text-center mt-5">會員列表</h2>
+        <h2 class="text-center mt-5 text-primary">會員列表</h2>
       </VCol>
       <!-- ===== 會員列表 -->
       <VCol cols="10" class="mx-auto">
@@ -89,6 +90,7 @@
       </VCard>
     </VForm>
   </VDialog>
+</div>
 </template>
 <!-- ------------------------------------------- -->
 <script setup>

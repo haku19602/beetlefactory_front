@@ -1,5 +1,5 @@
 <template>
-  <VCard elevation="0" rounded="xl" class="product-card">
+  <VCard flat="0" rounded="md" class="product-card">
     <!-- === 商品圖片 -->
     <RouterLink :to="'/products/' + _id">
       <!-- aspect-ratio="1" 寬度是高度的 1倍 -->
@@ -11,7 +11,7 @@
       <VChip density="comfortable">{{ category }}</VChip>
     </VCardText>
     <!-- === 商品價格 -->
-    <VCardSubtitle>NT.{{ price }}</VCardSubtitle>
+    <VCardSubtitle>NT. {{ price }}</VCardSubtitle>
     <!-- === 分隔線----------------------- -->
     <v-divider class="mx-3 mt-3"></v-divider>
     <!-- === 加入購物車、收藏 -->

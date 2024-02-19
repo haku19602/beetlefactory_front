@@ -1,16 +1,18 @@
 <template>
+<div style="background: #F8F4EB; height: 100%;">
   <VContainer>
     <VRow>
-      <VCol cols="12">
-        <h2 class="text-center text-back">商品</h2>
+      <VCol cols="12" class="pt-12">
+        <h2 class="text-center text-primary">商品</h2>
       </VCol>
 
-      <VCol cols="6" lg="4" v-for="product in products" :key="product._id">
+      <VCol cols="6" md="6" lg="4" v-for="product in products" :key="product._id">
         <!-- 商品卡片寫成元件傳入 -->
         <ProductCard v-bind="product"></ProductCard>
       </VCol>
     </VRow>
   </VContainer>
+</div>
 </template>
 
 <script setup>

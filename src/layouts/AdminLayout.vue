@@ -1,6 +1,6 @@
 <template>
   <!-- ========== 左側固定欄 -->
-  <VNavigationDrawer permanent class="pa-3">
+  <VNavigationDrawer permanent class="pa-3" color="primary">
     <!-- === 使用者資訊 -->
     <VList>
       <VListItem :prepend-avatar="user.avatar" :title="user.account" :subtitle="user.email"></VListItem>
