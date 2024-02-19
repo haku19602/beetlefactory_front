@@ -176,7 +176,7 @@ const logout = async () => {
 <style lang="scss" scoped>
 .v-btn {
   font-weight: 900;
-  margin: 0 5px;
+  margin: 0 8px;
   &.sign {
     border: 1.5px solid;
   }

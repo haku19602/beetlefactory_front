@@ -46,8 +46,18 @@ onMounted(() => {
     duration: 1,
     repeat: -1,
     yoyo: true
-    // ease: 'linear',
-    // repeatDelay: 0.5
+  })
+  // ===== beetle 動畫
+  gsap.from('.kv_beetle', {
+    top: '-250px',
+    opacity: 0,
+    duration: 2
+  })
+  // ===== factory 動畫
+  gsap.from('.kv_factory', {
+    bottom: '-250px',
+    opacity: 0,
+    duration: 2
   })
 })
 </script>
