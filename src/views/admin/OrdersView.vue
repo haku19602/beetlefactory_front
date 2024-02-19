@@ -1,5 +1,5 @@
 <template>
-<div style="background: #F8F4EB; height: 100%;">
+<div style="height: 100%;" class="bg-back">
   <h1>訂單管理 OrdersView.vue</h1>
 </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-<div style="background: #F8F4EB; height: 100%;">
+<div style="height: 100%;" class="bg-back">
   <VContainer class="pt-12">
     <VRow>
       <!-- ===== 商品圖 -->

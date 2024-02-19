@@ -3,11 +3,11 @@
     <VRow class="justify-center align-center" style="height: 100%;" >
       <!-- ===== 紅色精靈 -->
       <VCol cols="12" lg="3" class="d-flex justify-center">
-        <div class="red-square d-flex justify-space-evenly align-center">
-          <div class="eyes-white">
+        <div class="red-square d-flex justify-space-evenly align-center bg-secondary">
+          <div class="eyes-white bg-back">
             <div class="eyes-black"></div>
           </div>
-          <div class="eyes-white">
+          <div class="eyes-white bg-back">
             <div class="eyes-black"></div>
           </div>
         </div>
@@ -18,7 +18,7 @@
           <img src="@//assets/kv_beetle.png" class="kv_beetle">
           <img src="@//assets/kv_redbeetle.png" class="kv_redbeetle">
           <img src="@//assets/kv_factory.png" class="kv_factory">
-          <div class="o"></div>
+          <div class="o bg-secondary2"></div>
         </div>
       </VCol>
     </VRow>
@@ -57,13 +57,11 @@ onMounted(() => {
   width: 260px;
   height: 330px;
   border-radius: 50px;
-  background-color: #E16845;
 }
 .eyes-white{
   width: 85px;
   height: 60px;
   border-radius: 50%;
-  background: #F8F4EB;
   // ---
   position: relative;
 
@@ -82,7 +80,6 @@ onMounted(() => {
 .key_vision{
   width: 650px;
   height: 500px;
-  // background-color: #818B76;
   position: relative;
 }
 .kv_beetle{
@@ -103,7 +100,6 @@ onMounted(() => {
   width: 100px;
   height: 100px;
   border-radius: 100%;
-  background-color: #EEAE8E;
   // ----
   position: absolute;
   left: 360px;

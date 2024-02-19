@@ -27,8 +27,10 @@ export default createVuetify({
           // secondary: '#5CBBF6',
           primary: '#818B76',
           secondary: '#E16845',
+          secondary2: '#EEAE8E',
           warning: '#EFB158',
-          back: '#F8F4EB'
+          back: '#F8F4EB',
+          backdark: '#F6E8D2'
         }
       }
     }

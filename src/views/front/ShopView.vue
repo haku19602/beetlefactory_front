@@ -1,8 +1,8 @@
 <template>
-<div style="background: #F8F4EB; height: 100%;">
+<div style="height: 100%;" class="bg-back">
   <VContainer>
     <VRow>
-      <VCol cols="12" class="pt-12">
+      <VCol cols="12" class="pt-10">
         <h2 class="text-center text-primary">商品</h2>
       </VCol>
 

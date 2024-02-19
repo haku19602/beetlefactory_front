@@ -1,5 +1,5 @@
 <template>
-  <VApp class="bg-color">
+  <VApp class="bg-primary">
     <RouterView></RouterView>    <!-- 對應到路由設定的父層 -->
   </VApp>
 </template>
@@ -8,7 +8,4 @@
 </script>
 
 <style lang="scss" scoped>
-.bg-color{
-  background-color: #818B76;
-}
 </style>
