@@ -58,7 +58,7 @@ const addCart = async () => {
       text: '已加入購物車！',
       showCloseButton: false,
       snackbarProps: {
-        timeout: 800,
+        timeout: 1500,
         color: 'primary',
         location: 'center',
         height: '100px'
@@ -70,7 +70,7 @@ const addCart = async () => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 800,
+        timeout: 1500,
         color: 'secomdary',
         location: 'center'
       }
