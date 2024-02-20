@@ -59,6 +59,26 @@ const routes = [
         }
       },
       {
+        path: 'products/:id',
+        name: 'Product',
+        component: () => import('@/views/front/ProductEach.vue'),
+        meta: {
+          title: '甲蟲工廠 | 商品',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'cart',
+        name: 'Cart',
+        component: () => import('@/views/front/CartView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 購物車',
+          login: true,
+          admin: false
+        }
+      },
+      {
         path: 'member',
         name: 'Member',
         component: () => import('@/views/front/MemberView.vue'),
@@ -69,25 +89,25 @@ const routes = [
         }
       },
       {
-        path: 'products/:id',
-        name: 'Product',
-        component: () => import('@/views/front/ProductEach.vue'),
+        path: 'orders',
+        name: 'Orders',
+        component: () => import('@/views/front/OrdersView.vue'),
         meta: {
-          title: '甲蟲工廠 | 商品',
-          login: false,
+          title: '甲蟲工廠 | 我的訂單',
+          login: true,
+          admin: false
+        }
+      },
+      {
+        path: 'likes',
+        name: 'Likes',
+        component: () => import('@/views/front/LikesView.vue'),
+        meta: {
+          title: '甲蟲工廠 | 我的收藏',
+          login: true,
           admin: false
         }
       }
-      // {
-      //   path: 'cart',
-      //   name: 'Cart',
-      //   component: () => import('@/views/front/CartView.vue'),
-      //   meta: {
-      //     title: '甲蟲工廠 | 購物車',
-      //     login: true,
-      //     admin: false
-      //   }
-      // }
     ]
   },
   // ===== 後台 AdminLayout
