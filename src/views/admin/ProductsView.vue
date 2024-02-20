@@ -1,13 +1,13 @@
 <template>
 <div style="height: 100%;" class="bg-back">
   <VContainer>
-    <VRow>
+    <VRow class="justify-center">
       <!-- ===== title -->
-      <VCol cols="12">
+      <VCol cols="10">
         <h2 class="text-center mt-5 text-primary">商品列表</h2>
       </VCol>
       <!-- ===== 新增商品按鈕 -->
-      <VCol cols="12" class="text-center">
+      <VCol cols="10" class="text-end">
         <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
       </VCol>
       <!-- ===== 商品列表 -->
@@ -33,7 +33,15 @@
           <!-- === 指定 image 欄位的顯示方式 -->
           <!-- [`item.key`]，插槽後面= 可以帶出它的資料，這裡解構出 key item -->
           <template #[`item.image`]="{ item }">
-            <VImg :src="item.image" height="80px" contain></VImg>
+            <RouterLink :to="'/products/' + item._id">
+              <VImg :src="item.image" height="100px" contain></VImg>
+            </RouterLink>
+          </template>
+          <!-- === 指定 image 欄位的顯示方式 -->
+          <template #[`item.name`]="{ item }">
+            <RouterLink :to="'/products/' + item._id">
+              <p class="text-grey-darken-3">{{ item.name }}</p>
+            </RouterLink>
           </template>
           <!-- === 指定 sell 欄位的顯示方式 -->
           <template #[`item.sell`]="{ item }">
