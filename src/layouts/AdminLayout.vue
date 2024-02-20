@@ -28,7 +28,6 @@
 
 <script setup>
 import { useUserStore } from '@/store/user'
-// import { computed } from 'vue'
 
 const user = useUserStore()
 
@@ -37,10 +36,4 @@ const navItems = [
   { to: '/admin/orders', text: '訂單管理', icon: 'mdi-list-box' },
   { to: '/admin/members', text: '會員管理', icon: 'mdi-account-group' }
 ]
-
-// const prependAvatar = user.avatar
-
-// const prependAvatar = computed(() => {
-//   return `https://source.boringavatars.com/beam/120/${user.account}?colors=4EB3DE,8DE0A6,FCF09F,F27C7C,DE528C`
-// })
 </script>
