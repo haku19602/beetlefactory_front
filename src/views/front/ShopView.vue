@@ -1,9 +1,10 @@
 <template>
+<!-- ================ 商店街 -->
 <div style="height: 100%;" class="bg-back">
   <VContainer>
     <VRow>
       <VCol cols="12" class="pt-10">
-        <h2 class="text-center text-primary">商品</h2>
+        <h2 class="text-center text-primary">All</h2>
       </VCol>
 
       <VCol cols="6" md="6" lg="4" v-for="product in products" :key="product._id">

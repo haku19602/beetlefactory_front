@@ -7,7 +7,7 @@
         <h2 class="text-center mt-5 text-primary">商品列表</h2>
       </VCol>
       <!-- ===== 新增商品按鈕 -->
-      <VCol cols="12" class="mx-auto text-center">
+      <VCol cols="12" class="text-center">
         <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
       </VCol>
       <!-- ===== 商品列表 -->
@@ -130,7 +130,7 @@ const dialogRemove = ref(false)
 const dialogId = ref('')
 
 // ===== 商品分類
-const categories = ['成蟲', '幼蟲', '標本']
+const categories = ['成蟲', '幼蟲', '標本', '其他']
 
 // ===== 打開 新增or編輯對話框 function
 const openDialog = (item) => {
@@ -169,32 +169,16 @@ const closeDialogRemove = () => {
   dialogRemove.value = false
 }
 // ==================== 前端表單驗證 ====================
-// === 定義表單驗證規則
+// 1.=== 定義表單驗證規則
 const schema = yup.object({
-  name: yup
-    .string()
-    .required('缺少商品名稱'),
-  price: yup
-    .number()
-    .typeError('價格格式錯誤')
-    .required('缺少商品價格')
-    .min(0, '商品價格不能小於 0'),
-  stock: yup
-    .number()
-    .typeError('數量格式錯誤')
-    .required('缺少商品數量')
-    .min(0, '商品數量不能小於 0'),
-  description: yup
-    .string()
-    .required('缺少商品描述'),
-  category: yup
-    .string()
-    .required('缺少商品分類')
-    .test('isCategory', '商品分類錯誤', value => categories.includes(value)),
-  sell: yup
-    .boolean()
+  name: yup.string().required('缺少商品名稱'),
+  price: yup.number().typeError('價格格式錯誤').required('缺少商品價格').min(0, '商品價格不能小於 0'),
+  stock: yup.number().typeError('數量格式錯誤').required('缺少商品數量').min(0, '商品數量不能小於 0'),
+  description: yup.string().required('缺少商品描述'),
+  category: yup.string().required('缺少商品分類').test('isCategory', '商品分類錯誤', value => categories.includes(value)),
+  sell: yup.boolean()
 })
-// === 先 useForm -> 表單驗證方式綁定 schema
+// 2.=== 先 useForm -> 表單驗證方式綁定 schema
 const { handleSubmit, isSubmitting, resetForm } = useForm({ // handleSubmit 表單送出時的處理函式；isSubmitting 是否正在送出；resetForm 重置表單
   validationSchema: schema,
   // --- 初始值設定
@@ -207,7 +191,7 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({ // handleSubmit 表�
     sell: false
   }
 })
-// === 再 useField -> 建立表單欄位
+// 3.=== 再 useField -> 綁定表單欄位 -> 表單 DOM 使用 v-model 綁定自訂義驗證 schema 的 xx 欄位驗證
 // 讓表單欄位綁定到 schema 的規則
 const name = useField('name')
 const price = useField('price')
@@ -216,7 +200,7 @@ const description = useField('description')
 const category = useField('category')
 const sell = useField('sell')
 
-// === VueFileAgent 上傳檔案寫法
+// === VueFileAgent 上傳檔案綁定寫法
 const fileRecords = ref([])
 const rawFileRecords = ref([])
 // ====================================================
