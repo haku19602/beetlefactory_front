@@ -79,9 +79,9 @@ const routes = [
         }
       },
       {
-        path: 'member',
-        name: 'Member',
-        component: () => import('@/views/front/MemberView.vue'),
+        path: 'my',
+        name: 'My',
+        component: () => import('@/views/front/MyView.vue'),
         meta: {
           title: '甲蟲工廠 | 我的',
           login: true,
@@ -89,9 +89,19 @@ const routes = [
         }
       },
       {
-        path: 'orders',
+        path: 'mysetting',
+        name: 'Mysetting',
+        component: () => import('@/views/front/MySetting.vue'),
+        meta: {
+          title: '甲蟲工廠 | 會員設定',
+          login: true,
+          admin: false
+        }
+      },
+      {
+        path: 'myorders',
         name: 'Orders',
-        component: () => import('@/views/front/OrdersView.vue'),
+        component: () => import('@/views/front/MyOrders.vue'),
         meta: {
           title: '甲蟲工廠 | 我的訂單',
           login: true,
@@ -99,9 +109,9 @@ const routes = [
         }
       },
       {
-        path: 'likes',
+        path: 'mylikes',
         name: 'Likes',
-        component: () => import('@/views/front/LikesView.vue'),
+        component: () => import('@/views/front/MyLikes.vue'),
         meta: {
           title: '甲蟲工廠 | 我的收藏',
           login: true,

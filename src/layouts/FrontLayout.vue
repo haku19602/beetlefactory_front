@@ -132,7 +132,7 @@ const navItemsLeft = computed(() => {
 const navItemsRight = computed(() => {
   return [
     { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin },
-    { to: '/member', text: '我的', icon: 'mdi-account', show: user.isLogin },
+    { to: '/my', text: '我的', icon: 'mdi-account', show: user.isLogin },
     { to: '/admin', text: '管理員', icon: 'mdi-cog', show: user.isLogin && user.isAdmin }
   ]
 })
