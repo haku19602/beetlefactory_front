@@ -19,7 +19,7 @@
           :search="tableSearch"
           @update:items-per-page="tableLoadItems"
           @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems" class="py-5 px-10">
+          @update:page="tableLoadItems" class="py-5 px-10 bg-back">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
             <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"

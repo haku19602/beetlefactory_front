@@ -13,7 +13,7 @@
           </VImg>
         </VCol>
         <!-- ===== 文字說明 -->
-        <VCol cols="10" lg="5" class="pt-16">
+        <VCol cols="10" lg="5" class="pt-16 px-10">
             <!-- === 商品名稱 -->
             <h2>{{ product.name }}</h2>
             <!-- === 商品價格、商品分類 -->
@@ -106,7 +106,7 @@ const submit = handleSubmit(async (values) => {
   try {
     const { data } = await apiAuth.patch('/users/cart', {
       product: product.value._id,
-      quantity: values.quantity
+      quantity: values.quantity // 傳進後端的數量，後端會用原本的數量加上這個數量
     })
     user.cart = data.result
     createSnackbar({
@@ -146,7 +146,7 @@ onMounted(async () => { // 元件被掛到 DOM 時，才會發請求
     product.value.sell = data.result.sell
     product.value.category = data.result.category
     product.value.stock = data.result.stock
-    if (data.result.stock <= 5) {
+    if (data.result.stock <= 5 && data.result.stock > 0) {
       product.value.stockText = `最後 ${data.result.stock} 組！`
     }
     // === 更改網頁標題
@@ -177,6 +177,6 @@ onMounted(async () => { // 元件被掛到 DOM 時，才會發請求
   color: #E16845;
   font-weight: bold;
   font-size: 0.9rem;
-  padding-left: 0;
+  margin-left: -7px;
 }
 </style>

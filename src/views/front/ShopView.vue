@@ -9,7 +9,7 @@
 
         <VCol cols="6" md="6" lg="4" v-for="product in products" :key="product._id">
           <!-- 商品卡片寫成元件傳入 -->
-          <ProductCard v-bind="product"></ProductCard>
+          <ProductCard v-bind="product" class="my-md-3 my-lg-5"></ProductCard>
         </VCol>
       </VRow>
     </VContainer>

@@ -23,7 +23,7 @@
           :search="tableSearch"
           @update:items-per-page="tableLoadItems"
           @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems" class="py-5 px-10">
+          @update:page="tableLoadItems" class="py-5 px-10 bg-back">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
             <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
@@ -309,8 +309,10 @@ const tableSortBy = ref([
 const tablePage = ref(1)
 // === 表格商品資料陣列 -> 用來顯示目前頁面在表格上
 const tableProducts = ref([])
-// === 表格欄位設定
-// key 是後端回傳的資料 key，用 v-for 自動產生表格
+
+// === 表格有哪些欄位的設定
+// 欄位是固定的不用 ref，直接宣告，多語言就要寫成 computed
+// key 是後端回傳的資料 key，用 datatable 內建 :items 自動產生表格
 const tableHeaders = [
   { title: '圖片', align: 'center', sortable: false, key: 'image' },
   { title: '品名', align: 'center', sortable: true, key: 'name' },

@@ -1,6 +1,6 @@
 <template>
   <!-- ================ 商品卡片元件 -->
-  <VCard flat="0" rounded="md" class="product-card">
+  <VCard flat="0" rounded="md" class="product-card" color="back">
     <!-- === 商品圖片 -->
     <RouterLink :to="'/products/' + _id">
       <!-- aspect-ratio="1" 寬度是高度的 1倍 -->
@@ -38,6 +38,7 @@ const user = useUserStore()
 const createSnackbar = useSnackbar()
 const router = useRouter()
 
+// props 是從父元件傳遞過來的
 const props = defineProps(['_id', 'category', 'description', 'image', 'name', 'price', 'sell', 'stock'])
 
 // ===== 加入購物車 function
@@ -61,7 +62,7 @@ const addCart = async () => {
         timeout: 1500,
         color: 'primary',
         location: 'center',
-        height: '100px'
+        height: '80px'
       }
     })
   } catch (error) {
@@ -71,12 +72,47 @@ const addCart = async () => {
       showCloseButton: false,
       snackbarProps: {
         timeout: 1500,
-        color: 'secomdary',
-        location: 'center'
+        color: 'secondary',
+        location: 'center',
+        height: '80px'
       }
     })
   }
 }
+
+// ===== 加入收藏 function
+// const addLike = async () => {
+//   if (!user.isLogin) {
+//     router.push('/login')
+//     return
+//   }
+//   try {
+//     await apiAuth.patch('/users/likes', {
+//       product: props._id
+//     })
+//     createSnackbar({
+//       text: '已加入收藏！',
+//       showCloseButton: false,
+//       snackbarProps: {
+//         timeout: 1500,
+//         color: 'primary',
+//         location: 'center',
+//         height: '100px'
+//       }
+//     })
+//   } catch (error) {
+//     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+//     createSnackbar({
+//       text,
+//       showCloseButton: false,
+//       snackbarProps: {
+//         timeout: 1500,
+//         color: 'secomdary',
+//         location: 'center'
+//       }
+//     })
+//   }
+// }
 </script>
 
 <style lang="scss" scoped>
