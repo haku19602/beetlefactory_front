@@ -31,7 +31,8 @@
             </VForm>
             <!-- === 加入收藏 -->
             <div class="text-end">
-              <VBtn icon="mdi-heart-outline" color="secondary" variant="text" density="comfortable" @click="addLike" class="text-center"></VBtn>
+              <VBtn icon="mdi-heart" v-if="isLike" color="secondary" variant="text" density="comfortable" @click="addLike" class="text-center"></VBtn>
+              <VBtn icon="mdi-heart-outline" v-else color="secondary" variant="text" density="comfortable" @click="addLike" class="text-center"></VBtn>
             </div>
             <!-- === 商品描述，white-space: pre; 保留換行 -->
             <h4 class="text-primary">商品描述</h4>
@@ -51,7 +52,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -77,6 +78,11 @@ const product = ref({ // 建議要打預設值，不然會有可能出現 undefi
   category: '',
   stock: 0,
   stockText: ''
+})
+
+// ===== 計算是否已收藏 true/false
+const isLike = computed(() => {
+  return user.likes.includes(product.value._id)
 })
 
 // ==================== 前端表單驗證 ====================
@@ -113,9 +119,9 @@ const submit = handleSubmit(async (values) => {
       text: '新增成功',
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
-        color: 'primary',
-        location: 'bottom'
+        timeout: 1000,
+        color: 'back',
+        location: 'center'
       }
     })
   } catch (error) {
@@ -124,13 +130,58 @@ const submit = handleSubmit(async (values) => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
+        timeout: 1000,
         color: 'secondary',
-        location: 'bottom'
+        location: 'center'
       }
     })
   }
 })
+
+// ===== 加入收藏 function
+const addLike = async () => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+  try {
+    await apiAuth.patch('/users/likes', {
+      product: product.value._id
+    })
+
+    // 更新 user store 中「收藏商品陣列」
+    const idx = user.likes.findIndex(item => item === product.value._id)
+    if (idx > -1) {
+      user.likes.splice(idx, 1)
+    } else {
+      user.likes.push(product.value._id)
+    }
+
+    createSnackbar({
+      text: isLike.value ? '已加入收藏！' : '已取消收藏！',
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1000,
+        color: 'back',
+        location: 'center'
+        // height: '80px'
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1000,
+        color: 'secondary',
+        location: 'center'
+        // height: '80px'
+      }
+    })
+  }
+}
 
 // ===== 發請求去後端要該商品資料
 onMounted(async () => { // 元件被掛到 DOM 時，才會發請求

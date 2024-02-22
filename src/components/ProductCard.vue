@@ -67,9 +67,9 @@ const addCart = async () => {
       showCloseButton: false,
       snackbarProps: {
         timeout: 1500,
-        color: 'primary',
-        location: 'center',
-        height: '80px'
+        color: 'back',
+        location: 'center'
+        // height: '80px'
       }
     })
   } catch (error) {
@@ -80,8 +80,8 @@ const addCart = async () => {
       snackbarProps: {
         timeout: 1500,
         color: 'secondary',
-        location: 'center',
-        height: '80px'
+        location: 'center'
+        // height: '80px'
       }
     })
   }
@@ -107,13 +107,13 @@ const addLike = async () => {
     }
 
     createSnackbar({
-      text: '已加入收藏！',
+      text: isLike.value ? '已加入收藏！' : '已取消收藏！',
       showCloseButton: false,
       snackbarProps: {
-        timeout: 1500,
-        color: 'primary',
-        location: 'center',
-        height: '80px'
+        timeout: 1000,
+        color: 'back',
+        location: 'center'
+        // height: '80px'
       }
     })
   } catch (error) {
@@ -123,10 +123,10 @@ const addLike = async () => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 1500,
+        timeout: 1000,
         color: 'secondary',
-        location: 'center',
-        height: '80px'
+        location: 'center'
+        // height: '80px'
       }
     })
   }

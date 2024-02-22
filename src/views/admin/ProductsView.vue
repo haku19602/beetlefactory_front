@@ -37,7 +37,7 @@
               <VImg :src="item.image" height="100px" contain></VImg>
             </RouterLink>
           </template>
-          <!-- === 指定 image 欄位的顯示方式 -->
+          <!-- === 指定 name 欄位的顯示方式 -->
           <template #[`item.name`]="{ item }">
             <RouterLink :to="'/products/' + item._id">
               <p class="text-grey-darken-3">{{ item.name }}</p>

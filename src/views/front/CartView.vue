@@ -14,8 +14,10 @@
           <VRow v-for="item in cart" :key="item._id">
             <!-- === 圖片 -->
             <VCol cols="6" lg="3">
-              <!-- aspect-ratio="1"，寬度是高度的 1倍，不同寬高 img 都以方形佔位 -> 清單等高 -->
-              <VImg :src="item.product.image" aspect-ratio="1"></VImg>
+              <RouterLink :to="'/products/' + item.product._id">
+                <!-- aspect-ratio="1"，寬度是高度的 1倍，不同寬高 img 都以方形佔位 -> 清單等高 -->
+                <VImg :src="item.product.image" aspect-ratio="1"></VImg>
+              </RouterLink>
             </VCol>
             <!-- === 商品名稱、價格、數量、小計 -->
             <VCol cols="6" lg="9" class="d-flex flex-column flex-lg-row">
@@ -37,7 +39,8 @@
                 <p>小計：NT. {{ item.product.price * item.quantity }}</p>
               </VCol>
               <VCol class="d-flex justify-lg-space-around" lg="2">
-                <VBtn icon="mdi-heart-outline" size="small" color="secondary" variant="outlined" @click="addLike"></VBtn>
+                <VBtn icon="mdi-heart" v-if="isLike(item.product._id)" size="small" color="secondary" variant="outlined" @click="addLike(item.product._id)"></VBtn>
+                <VBtn icon="mdi-heart-outline" v-else size="small" color="secondary" variant="outlined" @click="addLike(item.product._id)"></VBtn>
                 <VBtn icon="mdi-delete" size="small" color="secondary" @click="editCart(item.product._id, item.quantity * -1)"></VBtn>
               </VCol>
             </VCol>
@@ -58,7 +61,7 @@
 <!-- ------------------------------------------------------------------ -->
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/store/user'
@@ -71,6 +74,11 @@ const router = useRouter()
 
 // ===== 購物車資料陣列
 const cart = ref([])
+
+// ===== 是否收藏
+const isLike = (productId) => {
+  return user.likes.includes(productId)
+}
 
 // const total = computed(() => {
 //   return cart.value.reduce((total, current) => {
@@ -91,7 +99,7 @@ const editCart = async (product, quantity) => {
   try {
     // === 發請求去後端修改購物車資料
     const { data } = await apiAuth.patch('/users/cart', {
-      product,
+      product, // 不用加 : product: product，因為 key 跟 value 一樣
       quantity // 傳進後端的數量，後端會用原本的數量加上這個數量
     })
     // 把 user store 中「購物車商品總數」，更新為後端回應的 data.result
@@ -129,6 +137,50 @@ const editCart = async (product, quantity) => {
         timeout: 2000,
         color: 'secondary',
         location: 'bottom'
+      }
+    })
+  }
+}
+// ===== 加入收藏 function
+const addLike = async (product) => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+  try {
+    await apiAuth.patch('/users/likes', {
+      product // 不用加 : product: product，因為 key 跟 value 一樣
+    })
+
+    // 更新 user store 中「收藏商品陣列」
+    const idx = user.likes.findIndex(item => item === product)
+    if (idx > -1) {
+      user.likes.splice(idx, 1)
+    } else {
+      user.likes.push(product)
+    }
+
+    createSnackbar({
+      text: isLike(product) ? '已加入收藏！' : '已取消收藏！',
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1000,
+        color: 'back',
+        location: 'center'
+        // height: '80px'
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1000,
+        color: 'secondary',
+        location: 'center'
+        // height: '80px'
       }
     })
   }

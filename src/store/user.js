@@ -44,7 +44,7 @@ export const useUserStore = defineStore('user', () => {
     try {
       // data 是後端 '/users/me' 的回應，也就是後端 getProfile 的回應，裡面有使用者資料
       const { data } = await apiAuth.get('/users/me')
-      // 把後端回應的 likes 陣列轉換成商品 id 的陣列，原本是 likes: [{ product: '_id' }]
+      // 把後端回應的 likes 陣列轉換成商品 id 的陣列。原本是 likes: [{ product: '_id' }]，變成 likes: ['_id']
       data.result.likes = data.result.likes.map((item) => item.product)
       login(data.result)
     } catch (error) {
