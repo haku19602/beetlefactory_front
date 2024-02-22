@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', () => {
   const cart = ref(0) // 購物車商品總數量
   const role = ref(UserRole.USER)
   const avatar = ref('')
+  const likes = ref([]) // likes 清單陣列
 
   // === login 登入時修改成傳入的資料
   const login = (data) => {
@@ -25,6 +26,7 @@ export const useUserStore = defineStore('user', () => {
     cart.value = data.cart
     role.value = data.role
     avatar.value = data.avatar
+    likes.value = data.likes
   }
 
   // === isLogin 判斷是否登入狀態
@@ -42,6 +44,8 @@ export const useUserStore = defineStore('user', () => {
     try {
       // data 是後端 '/users/me' 的回應，也就是後端 getProfile 的回應，裡面有使用者資料
       const { data } = await apiAuth.get('/users/me')
+      // 把後端回應的 likes 陣列轉換成商品 id 的陣列，原本是 likes: [{ product: '_id' }]
+      data.result.likes = data.result.likes.map((item) => item.product)
       login(data.result)
     } catch (error) {
       logout()
@@ -56,6 +60,7 @@ export const useUserStore = defineStore('user', () => {
     cart.value = 0
     role.value = UserRole.USER
     avatar.value = ''
+    likes.value = []
   }
 
   return {
@@ -65,6 +70,7 @@ export const useUserStore = defineStore('user', () => {
     cart,
     role,
     avatar,
+    likes,
     login,
     logout,
     isLogin,

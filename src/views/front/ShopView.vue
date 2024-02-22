@@ -26,20 +26,21 @@ import gsap from 'gsap'
 const { api } = useApi()
 const createSnackbar = useSnackbar()
 
-// ===== 商品陣列
+// ===== 商品陣列，把後端要到的商品資料放進去
 const products = ref([])
 
-// ===== 取得商品資料
+// ===== 取得有上架商品資料
 onMounted(async () => { // 不用 onMounted 的話，就是在 created 的生命週期呼叫 api，那裡面就不能對 DOM 做處理
   try {
     // === 元件被掛到 DOM 時，才會發請求去後端要資料
     const { data } = await api.get('/products', {
       params: {
-        itemsPerPage: -1 // 沒有分頁 - 回全部??????????
+        itemsPerPage: -1 // 沒有分頁 - 回全部！！！！！！！！！！
       }
     })
     // === 把要到的資料 push 進 products 陣列
     products.value.push(...data.result.data)
+    // console.log(products.value)
     // === 等待 vue 重新渲染頁面
     await nextTick() // data 更新後不會立即渲染 DOM
     // === 商品卡片出場動畫

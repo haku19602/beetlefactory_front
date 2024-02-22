@@ -22,12 +22,14 @@
     <VCardActions>
       <VBtn prepend-icon="mdi-cart" color="primary" rounded @click="addCart" :disabled="stock <= 0">加入購物車</VBtn>
       <v-spacer></v-spacer>
-      <VBtn icon="mdi-heart-outline" color="secondary" @click="addLike"></VBtn>
+      <VBtn v-if="isLike" icon="mdi-heart" color="secondary" @click="addLike"></VBtn>
+      <VBtn v-else icon="mdi-heart-outline" color="secondary" @click="addLike"></VBtn>
     </VCardActions>
   </VCard>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useUserStore } from '@/store/user'
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -38,8 +40,13 @@ const user = useUserStore()
 const createSnackbar = useSnackbar()
 const router = useRouter()
 
-// props 是從父元件傳遞過來的
+// ===== 定義商品卡片元件要接收的資料
 const props = defineProps(['_id', 'category', 'description', 'image', 'name', 'price', 'sell', 'stock'])
+
+// ===== 計算是否已收藏 true/false
+const isLike = computed(() => {
+  return user.likes.includes(props._id)
+})
 
 // ===== 加入購物車 function
 const addCart = async () => {
@@ -81,38 +88,49 @@ const addCart = async () => {
 }
 
 // ===== 加入收藏 function
-// const addLike = async () => {
-//   if (!user.isLogin) {
-//     router.push('/login')
-//     return
-//   }
-//   try {
-//     await apiAuth.patch('/users/likes', {
-//       product: props._id
-//     })
-//     createSnackbar({
-//       text: '已加入收藏！',
-//       showCloseButton: false,
-//       snackbarProps: {
-//         timeout: 1500,
-//         color: 'primary',
-//         location: 'center',
-//         height: '100px'
-//       }
-//     })
-//   } catch (error) {
-//     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
-//     createSnackbar({
-//       text,
-//       showCloseButton: false,
-//       snackbarProps: {
-//         timeout: 1500,
-//         color: 'secomdary',
-//         location: 'center'
-//       }
-//     })
-//   }
-// }
+const addLike = async () => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+  try {
+    await apiAuth.patch('/users/likes', {
+      product: props._id
+    })
+
+    // 更新 user store 中「收藏商品陣列」
+    const idx = user.likes.findIndex(item => item === props._id)
+    if (idx > -1) {
+      user.likes.splice(idx, 1)
+    } else {
+      user.likes.push(props._id)
+    }
+
+    createSnackbar({
+      text: '已加入收藏！',
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1500,
+        color: 'primary',
+        location: 'center',
+        height: '80px'
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 1500,
+        color: 'secondary',
+        location: 'center',
+        height: '80px'
+      }
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
