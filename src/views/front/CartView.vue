@@ -22,25 +22,34 @@
             <!-- === 商品名稱、價格、數量、小計 -->
             <VCol cols="6" lg="9" class="d-flex flex-column flex-lg-row">
               <VCol lg="4">
-                <h3>{{ item.product.name }}</h3>
-                <p class="text-grey-darken-1">NT. {{ item.product.price }}</p>
+                <!-- 上架或有庫存的顯示 -->
+                <div v-if="item.product.sell && item.product.stock > 0">
+                  <h3>{{ item.product.name }}</h3>
+                  <p class="text-grey-darken-1">NT. {{ item.product.price }}</p>
+                </div>
+                <!-- 下架或沒庫存的顯示 -->
+                <div v-else>
+                  <h3 class="text-decoration-line-through">{{ item.product.name }}</h3>
+                  <p class="text-secondary text-subtitle-2">商品已下架 或 暫時無庫存</p>
+                  <p class="text-grey-darken-1">NT. {{ item.product.price }}</p>
+                </div>
                 <VChip density="comfortable" class="mt-2" variant="outlined" color="primary">{{ item.product.category }}</VChip>
               </VCol>
               <VCol>
-                <p>
+                <p :class="item.product.sell && item.product.stock > 0 ? [] : ['text-grey']">
                   數量：
-                  <VBtn icon="mdi-minus" variant="text" density="compact" color="primary" class="mb-1" @click="editCart(item.product._id, -1)"></VBtn>
+                  <VBtn icon="mdi-minus" variant="text" density="compact" color="primary" class="mb-1" :disabled="!item.product.sell || item.product.stock <= 0" @click="editCart(item.product._id, -1)"></VBtn>
                   {{ item.quantity }}
-                  <VBtn icon="mdi-plus" variant="text" density="compact" color="primary" class="mb-1" @click="editCart(item.product._id, 1)"></VBtn>
+                  <VBtn icon="mdi-plus" variant="text" density="compact" color="primary" class="mb-1" :disabled="!item.product.sell || item.product.stock <= 0" @click="editCart(item.product._id, 1)"></VBtn>
                 </p>
-                <p v-if="item.product.stock < 5" class="text-secondary">最後 {{ item.product.stock }} 組！</p>
+                <p v-if="item.product.stock <= 5 && item.product.stock > 0" class="text-secondary text-subtitle-2">最後 {{ item.product.stock }} 組！</p>
               </VCol>
               <VCol>
-                <p>小計：NT. {{ item.product.price * item.quantity }}</p>
+                <p :class="item.product.sell && item.product.stock > 0 ? [] : ['text-grey']">小計：NT. <b>{{ item.product.price * item.quantity }}</b></p>
               </VCol>
-              <VCol class="d-flex justify-lg-space-around" lg="2">
-                <VBtn icon="mdi-heart" v-if="isLike(item.product._id)" size="small" color="secondary" variant="outlined" @click="addLike(item.product._id)"></VBtn>
-                <VBtn icon="mdi-heart-outline" v-else size="small" color="secondary" variant="outlined" @click="addLike(item.product._id)"></VBtn>
+              <VCol class="d-flex" lg="2">
+                <VBtn icon="mdi-heart" v-if="isLike(item.product._id)" size="small" color="secondary" variant="outlined" class="me-3" @click="addLike(item.product._id)"></VBtn>
+                <VBtn icon="mdi-heart-outline" v-else size="small" color="secondary" variant="outlined" class="me-3" @click="addLike(item.product._id)"></VBtn>
                 <VBtn icon="mdi-delete" size="small" color="secondary" @click="editCart(item.product._id, item.quantity * -1)"></VBtn>
               </VCol>
             </VCol>
@@ -49,9 +58,14 @@
           </VRow>
         </VCol>
 
+        <!-- ==== 總金額 -->
+        <VCol cols="12" class="text-end pe-10">
+          <p>共 <b>{{ user.cart }}</b> 件商品</p>
+          <p>總計：NT. <b class="text-h5 font-weight-bold">{{ total }}</b></p>
+        </VCol>
         <!-- ==== 結帳按鈕 -->
-        <VCol cols="12" class="text-center mb-12">
-          <VBtn color="primary" size="large" :disabled="user.cart === 0">結帳</VBtn>
+        <VCol cols="12" class="text-end mb-16 pe-10">
+          <VBtn color="primary" size="large" :disabled="!canCheckout">結帳</VBtn>
         </VCol>
       </VRow>
     </VContainer>
@@ -61,7 +75,7 @@
 <!-- ------------------------------------------------------------------ -->
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/store/user'
@@ -80,15 +94,19 @@ const isLike = (productId) => {
   return user.likes.includes(productId)
 }
 
-// const total = computed(() => {
-//   return cart.value.reduce((total, current) => {
-//     return total + current.quantity * current.product.price
-//   }, 0)
-// })
+// ===== 計算總金額
+const total = computed(() => {
+  // 陣列.reduce((前次跑到的累加值, 目前跑到陣列項目的值) => { return total + current }, 初始值)
+  return cart.value.reduce((total, current) => {
+    return total + current.quantity * current.product.price
+  }, 0)
+})
 
-// const canCheckout = computed(() => {
-//   return cart.value.length > 0 && !cart.value.some(item => !item.product.sell)
-// })
+// ===== 是否可以結帳，用來綁定結帳按鈕是否可以點擊
+const canCheckout = computed(() => {
+  // 購物車有商品，且購物車內商品都是上架的，且購物車內商品都有庫存
+  return cart.value.length > 0 && !cart.value.some(item => !item.product.sell) && !cart.value.some(item => item.product.stock <= 0)
+})
 
 // ===== 購物車改值(增減數量、刪除)
 const editCart = async (product, quantity) => {
