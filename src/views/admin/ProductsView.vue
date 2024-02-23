@@ -39,8 +39,8 @@
           </template>
           <!-- === 指定 name 欄位的顯示方式 -->
           <template #[`item.name`]="{ item }">
-            <RouterLink :to="'/products/' + item._id">
-              <p class="text-grey-darken-3">{{ item.name }}</p>
+            <RouterLink :to="'/products/' + item._id" class="text-decoration-none">
+              <p class="text-grey-darken-3 font-weight-bold">{{ item.name }}</p>
             </RouterLink>
           </template>
           <!-- === 指定 sell 欄位的顯示方式 -->
