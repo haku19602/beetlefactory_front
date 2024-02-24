@@ -1,0 +1,1 @@
+import{_ as e,a1 as s,a2 as t,a9 as c}from"./index-56665f09.js";const o={},a={style:{height:"100%"},class:"bg-back"},r=c("h1",null,"訂單管理 OrdersView.vue",-1),_=[r];function n(d,i){return s(),t("div",a,_)}const h=e(o,[["render",n]]);export{h as default};
