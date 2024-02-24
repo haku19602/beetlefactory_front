@@ -3,23 +3,24 @@
     <VContainer>
       <VRow class="justify-center">
         <!-- ===== 標題步驟！！！ -->
-        <VCol cols="12" md="10" class="text-center mt-8">
-          <VChip class="vchip-space" variant="outlined" size="large" color="primary" append-icon="mdi-check-circle-outline"><b>購物車</b>&nbsp;>&nbsp;填寫運送資訊&nbsp;>&nbsp;購買完成 </VChip>
+        <VCol cols="12" md="11" class="text-center mt-8">
+          <VChip class="vchip-space text-body-2 text-md-body-1" variant="outlined" size="large" color="primary" append-icon="mdi-check-circle-outline">購物車&nbsp;>&nbsp;填寫運送資訊&nbsp;>&nbsp;送出訂單&nbsp;>&nbsp;付款</VChip>
           <VDivider class="mx-3 my-5"></VDivider>
         </VCol>
 
         <!-- ===== 購物車清單！！！ -->
-        <VCol cols="12" md="10">
+        <VCol cols="12" md="11">
           <p v-if="user.cart === 0" class="text-center text-grey-darken-1">----- 購物車沒有商品 -----</p>
+          <!-- === 每項清單 v-for -->
           <VRow v-for="item in cart" :key="item._id">
-            <!-- === 圖片 -->
+            <!-- --- 圖片 -->
             <VCol cols="6" lg="3">
               <RouterLink :to="'/products/' + item.product._id">
                 <!-- aspect-ratio="1"，寬度是高度的 1倍，不同寬高 img 都以方形佔位 -> 清單等高 -->
                 <VImg :src="item.product.image" aspect-ratio="1"></VImg>
               </RouterLink>
             </VCol>
-            <!-- === 商品名稱、價格、數量、小計 -->
+            <!-- --- 商品名稱、價格、數量、小計 -->
             <VCol cols="6" lg="9" class="d-flex flex-column flex-lg-row">
               <VCol lg="4">
                 <!-- 上架或有庫存的顯示 -->
@@ -53,31 +54,54 @@
                 <VBtn icon="mdi-delete" size="small" color="secondary" @click="editCart(item.product._id, item.quantity * -1)"></VBtn>
               </VCol>
             </VCol>
-
             <VDivider class="mx-3 my-3"></VDivider>
           </VRow>
         </VCol>
 
         <!-- ===== 總計！！！ -->
-        <VCol cols="12" md="10" class="text-end pe-10">
+        <VCol cols="12" md="11" class="text-end pe-10">
           <p>共 <b>{{ user.cart }}</b> 件商品</p>
           <p>總計：NT. <b class="text-h5 font-weight-bold">{{ total }}</b></p>
+          <p class="text-body-2 text-grey-darken-1">(運費另計)</p>
         </VCol>
+
         <!-- ===== 填寫運送資訊按鈕！！！ -->
-        <VCol cols="12" md="10" class="text-end pe-10">
-          <VBtn color="primary" size="large" rounded append-icon="mdi-arrow-down-circle" :disabled="!canCheckout" @click="openForm = !openForm">填寫運送資訊</VBtn>
+        <VCol cols="12" md="11" class="text-end pe-10 mb-5">
+          <VBtn color="primary" size="large" rounded append-icon="mdi-arrow-down-circle" @click="openForm = !openForm">填寫運送資訊</VBtn>
         </VCol>
-        <!-- ===== 運送資訊表單 -->
-        <VCol cols="12" md="10" class="text-end mb-16 pe-10">
-          <VForm v-show="openForm">
-            <VSelect label="運送方式" variant="outlined" density="compact" :items="categories"></VSelect>
-            <VTextField v-model="name" label="收件人姓名" variant="outlined" density="compact" class="pb-3" ></VTextField>
-            <VTextField v-model="phone" label="收件人電話" variant="outlined" density="compact" class="pb-3"></VTextField>
-            <VTextField v-model="address" label="收件地址" variant="outlined" density="compact" class="pb-3"></VTextField>
-            <!-- === 結帳按鈕，相當於送出運送資訊表單 -->
-            <VBtn color="primary" size="large" rounded append-icon="mdi-arrow-right-circle" :disabled="!canCheckout" @click="checkout">結帳</VBtn>
+
+        <!-- ===== 運送資訊表單！！！ -->
+        <VCol cols="12" md="11" class="text-end mb-16 pe-10">
+          <VForm v-show="openForm" :disabled="isSubmitting" @submit.prevent="checkout">
+            <VRow>
+              <VCol cols="12" md="4">
+                <VTextField prepend-icon="mdi-account-box-outline" label="收件人姓名" placeholder="王X明" hint="請填寫真實姓名以利收件" variant="outlined" density="compact"
+                  v-model="name.value.value" :error-messages="name.errorMessage.value"></VTextField>
+              </VCol>
+              <VCol cols="12" md="4">
+                <VTextField prepend-icon="mdi-phone-outline" label="收件人電話" placeholder="0912345678" variant="outlined" density="compact"
+                  v-model="phone.value.value" :error-messages="phone.errorMessage.value"></VTextField>
+              </VCol>
+              <VCol cols="12" md="4">
+                <VSelect prepend-icon="mdi-package-variant-closed-check" label="運送方式" variant="outlined" density="compact" :items="categories"
+                  v-model="delivery.value.value" :error-messages="delivery.errorMessage.value"></VSelect>
+              </VCol>
+              <VCol cols="12" md="12">
+                <VTextField prepend-icon="mdi-map-marker-outline" label="收件地址" placeholder="請填寫宅配地址 或 7-11 門市，面交請填寫「面交」" variant="outlined" density="compact"
+                  v-model="address.value.value" :error-messages="address.errorMessage.value"></VTextField>
+              </VCol>
+              <VCol cols="12">
+                <VTextarea prepend-icon="mdi-text" label="訂單備註" variant="outlined" density="compact" clearable auto-grow
+                  v-model="note.value.value" :error-messages="note.errorMessage.value"></VTextarea>
+              </VCol>
+                <!-- === 結帳按鈕，相當於送出運送資訊表單 -->
+              <VCol cols="12">
+                <VBtn type="submit" color="primary" size="large" rounded append-icon="mdi-arrow-right-circle" :disabled="!canCheckout" :loading="isSubmitting">送出訂單</VBtn>
+              </VCol>
+            </VRow>
           </VForm>
         </VCol>
+
       </VRow>
     </VContainer>
     <!-- <VFooter></VFooter> -->
@@ -91,6 +115,8 @@ import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/store/user'
 import { useRouter } from 'vue-router'
+import * as yup from 'yup'
+import { useForm, useField } from 'vee-validate'
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
@@ -222,25 +248,62 @@ const addLike = async (product) => {
   }
 }
 
-// ===== 判斷結帳是否正在送出中，用來綁定結帳按鈕是否可以點擊，避免重複送出
-const isSubmitting = ref(false)
+// ==================== 前端表單驗證 ====================
+// 1.=== 定義表單驗證規則
+const schema = yup.object({
+  name: yup
+    .string()
+    .required('收件人姓名 必填'),
+  phone: yup
+    .string()
+    .required('收件人電話 必填')
+    .min(10, '手機號碼格式錯誤')
+    .max(10, '手機號碼格式錯誤'),
+  delivery: yup
+    .string()
+    .required('運送方式 必填')
+    .test('isCategory', '運送方式錯誤', value => categories.includes(value)),
+  address: yup
+    .string()
+    .required('收件地址 必填'),
+  note: yup
+    .string()
+})
+// 2.=== 先 useForm -> 表單驗證方式綁定 schema
+// handleSubmit 表單送出時的處理函式；isSubmitting 是否正在送出
+const { handleSubmit, isSubmitting } = useForm({
+  validationSchema: schema
+})
+// 3.=== 再 useField -> 綁定表單欄位 -> 表單 DOM 使用 v-model 綁定自訂義驗證 schema 的 xx 欄位驗證
+// 要跟上面 schema 的名稱對到，例如 'name'
+const name = useField('name')
+const phone = useField('phone')
+const delivery = useField('delivery')
+const address = useField('address')
+const note = useField('note')
+// ====================================================
 
 // ===== 結帳 function
-const checkout = async () => {
-  isSubmitting.value = true
-
+const checkout = handleSubmit(async (values) => {
   try {
     await apiAuth.post('/orders', {
       // 要送出的東西，這裡的 key 要跟後端接收的欄位名稱一樣
+      name: values.name,
+      phone: values.phone,
+      delivery: values.delivery,
+      address: values.address,
+      note: values.note
     })
+    // 清空前端 user store 中的購物車商品總數
     user.cart = 0
-    router.push('/orders')
+    // 跳轉到訂單頁面
+    router.push('/myorders')
     createSnackbar({
-      text: '結帳成功',
+      text: '訂單送出成功',
       showCloseButton: false,
       snackbarProps: {
         timeout: 2000,
-        color: 'green',
+        color: 'back',
         location: 'bottom'
       }
     })
@@ -251,14 +314,16 @@ const checkout = async () => {
       showCloseButton: false,
       snackbarProps: {
         timeout: 2000,
-        color: 'red',
+        color: 'secondary',
         location: 'bottom'
       }
     })
+    // 重新整理頁面
+    setTimeout(() => {
+      router.go(0)
+    }, 2000)
   }
-
-  isSubmitting.value = false
-}
+})
 
 // ===== 跟後端要購物車資料
 onMounted(async () => {

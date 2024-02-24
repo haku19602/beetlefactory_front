@@ -22,8 +22,8 @@
     <VCardActions>
       <VBtn prepend-icon="mdi-cart" color="primary" rounded @click="addCart" :disabled="stock <= 0">加入購物車</VBtn>
       <v-spacer></v-spacer>
-      <VBtn v-if="isLike" icon="mdi-heart" color="secondary" @click="addLike"></VBtn>
-      <VBtn v-else icon="mdi-heart-outline" color="secondary" @click="addLike"></VBtn>
+      <VBtn v-if="isLike" icon="mdi-heart" density="comfortable" color="secondary" @click="addLike"></VBtn>
+      <VBtn v-else icon="mdi-heart-outline" density="comfortable" color="secondary" @click="addLike"></VBtn>
     </VCardActions>
   </VCard>
 </template>

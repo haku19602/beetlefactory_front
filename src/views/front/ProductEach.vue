@@ -13,7 +13,7 @@
           </VImg>
         </VCol>
         <!-- ===== 文字說明 -->
-        <VCol cols="10" lg="5" class="pt-16 px-10">
+        <VCol cols="12" md="10" lg="5" class="pt-16 px-10">
             <!-- === 商品名稱 -->
             <h2>{{ product.name }}</h2>
             <!-- === 商品價格、商品分類 -->
