@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
   const avatar = ref('')
   const likes = ref([]) // likes 清單陣列
 
-  // === login 登入時修改成傳入的資料
+  // === login 登入時修改成登入時傳入的資料
   const login = (data) => {
     if (data.token) {
       token.value = data.token
@@ -26,6 +26,8 @@ export const useUserStore = defineStore('user', () => {
     cart.value = data.cart
     role.value = data.role
     avatar.value = data.avatar
+    // 把後端回應的 likes 陣列轉換成商品 id 的陣列。原本是 likes: [{ product: '_id' }]，變成 likes: ['_id']
+    data.likes = data.likes.map((item) => item.product)
     likes.value = data.likes
   }
 
