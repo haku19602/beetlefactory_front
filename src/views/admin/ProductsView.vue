@@ -1,67 +1,68 @@
 <template>
-<div style="height: 100%;" class="bg-back">
-  <VContainer>
-    <VRow class="justify-center">
-      <!-- ===== title -->
-      <VCol cols="10">
-        <h2 class="text-center mt-5 text-primary">商品列表</h2>
-      </VCol>
-      <!-- ===== 新增商品按鈕 -->
-      <VCol cols="10" class="text-end">
-        <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
-      </VCol>
-      <!-- ===== 商品列表 -->
-      <VCol cols="10" class="mx-auto">
-        <VDataTableServer
-          v-model:items-per-page="tableItemsPerPage"
-          v-model:sort-by="tableSortBy"
-          v-model:page="tablePage"
-          :items="tableProducts"
-          :headers="tableHeaders"
-          :loading="tableLoading"
-          :items-length="tableItemsLength"
-          :search="tableSearch"
-          @update:items-per-page="tableLoadItems"
-          @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems" class="py-5 px-10 bg-back">
-          <!-- === 上方插槽 放搜尋功能 -->
-          <template #top>
-            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
-              @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
-            </VTextField>
-          </template>
-          <!-- === 指定 image 欄位的顯示方式 -->
-          <!-- [`item.key`]，插槽後面= 可以帶出它的資料，這裡解構出 key item -->
-          <template #[`item.image`]="{ item }">
-            <RouterLink :to="'/products/' + item._id">
-              <VImg :src="item.image" height="100px" contain></VImg>
-            </RouterLink>
-          </template>
-          <!-- === 指定 name 欄位的顯示方式 -->
-          <template #[`item.name`]="{ item }">
-            <RouterLink :to="'/products/' + item._id" class="text-decoration-none">
-              <p class="text-grey-darken-3 font-weight-bold">{{ item.name }}</p>
-            </RouterLink>
-          </template>
-          <!-- === 指定 sell 欄位的顯示方式 -->
-          <template #[`item.sell`]="{ item }">
-            <VIcon icon="mdi-check" v-if="item.sell" color="primary"></VIcon>
-          </template>
-          <!-- === 指定 edit 欄位的顯示方式 -->
-          <template #[`item.edit`]="{ item }">
-            <VBtn icon="mdi-pencil" variant="text" color="primary" @click="openDialog(item)"></VBtn>
-          </template>
-          <!-- === 指定 remove 欄位的顯示方式 -->
-          <template #[`item.remove`]="{ item }">
-            <VBtn icon="mdi-delete" variant="text" color="secondary" @click="openDialogRemove(item)"></VBtn>
-          </template>
-        </VDataTableServer>
-      </VCol>
-    </VRow>
-  </VContainer>
+  <div style="height: 100%;" class="bg-back">
+    <VContainer>
+      <VRow class="justify-center">
+        <!-- ===== title -->
+        <VCol cols="12" lg="10">
+          <h2 class="text-center mt-5 text-primary">商品列表</h2>
+        </VCol>
+        <!-- ===== 新增商品按鈕 -->
+        <VCol cols="12" lg="10" class="text-end">
+          <VBtn prepend-icon="mdi-plus" color="primary" rounded @click="openDialog()">新增商品</VBtn>
+        </VCol>
+        <!-- ===== 商品列表 -->
+        <VCol cols="12" lg="10">
+          <VDataTableServer
+            v-model:items-per-page="tableItemsPerPage"
+            v-model:sort-by="tableSortBy"
+            v-model:page="tablePage"
+            :items="tableProducts"
+            :headers="tableHeaders"
+            :search="tableSearch"
+            :items-length="tableItemsLength"
+            :loading="tableLoading"
+            @update:items-per-page="tableLoadItems"
+            @update:sort-by="tableLoadItems"
+            @update:page="tableLoadItems"
+            class="py-5 px-10 bg-back">
+            <!-- === 上方插槽 放搜尋功能 -->
+            <template #top>
+              <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
+                @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
+              </VTextField>
+            </template>
+            <!-- === 指定 image 欄位的顯示方式 -->
+            <!-- [`item.key`]，插槽後面= 可以帶出它的資料，這裡解構出 key item -->
+            <template #[`item.image`]="{ item }">
+              <RouterLink :to="'/products/' + item._id">
+                <VImg :src="item.image" height="100px" contain></VImg>
+              </RouterLink>
+            </template>
+            <!-- === 指定 name 欄位的顯示方式 -->
+            <template #[`item.name`]="{ item }">
+              <RouterLink :to="'/products/' + item._id" class="text-decoration-none">
+                <p class="text-grey-darken-3 font-weight-bold">{{ item.name }}</p>
+              </RouterLink>
+            </template>
+            <!-- === 指定 sell 欄位的顯示方式 -->
+            <template #[`item.sell`]="{ item }">
+              <VIcon icon="mdi-check" v-if="item.sell" color="primary"></VIcon>
+            </template>
+            <!-- === 指定 edit 欄位的顯示方式 -->
+            <template #[`item.edit`]="{ item }">
+              <VBtn icon="mdi-pencil" variant="text" color="primary" @click="openDialog(item)"></VBtn>
+            </template>
+            <!-- === 指定 remove 欄位的顯示方式 -->
+            <template #[`item.remove`]="{ item }">
+              <VBtn icon="mdi-delete" variant="text" color="secondary" @click="openDialogRemove(item)"></VBtn>
+            </template>
+          </VDataTableServer>
+        </VCol>
+      </VRow>
+    </VContainer>
 
-  <!-- ===== 刪除商品確認視窗 -->
-  <VDialog v-model="dialogRemove" width="300px">
+    <!-- ===== 刪除商品確認視窗 -->
+    <VDialog v-model="dialogRemove" width="300px">
     <VCard rounded="xl">
       <VIcon icon="mdi-alert-circle" color="secondary" size="50" class="ma-auto mt-5"></VIcon>
       <VCardText>確定要刪除「{{ name.value.value }}」嗎？此動作無法復原！</VCardText>
@@ -71,42 +72,42 @@
         <VBtn color="secondary" rounded @click="remove">確認刪除</VBtn>
       </VCardActions>
     </VCard>
-  </VDialog>
+    </VDialog>
 
-  <!-- ===== 新增或編輯商品 跳出的視窗 VDialog -->
-  <VDialog v-model="dialog" persistent width="500px">
-    <VForm :disabled="isSubmitting" @submit.prevent="submit">
-      <VCard rounded="xl">
-        <VCardTitle class="text-center mt-3 pb-0">{{ dialogId === '' ? '新增商品' : '編輯商品' }}</VCardTitle>
+    <!-- ===== 新增或編輯商品 跳出的視窗 VDialog -->
+    <VDialog v-model="dialog" persistent width="500px">
+      <VForm :disabled="isSubmitting" @submit.prevent="submit">
+        <VCard rounded="xl">
+          <VCardTitle class="text-center mt-3 pb-0">{{ dialogId === '' ? '新增商品' : '編輯商品' }}</VCardTitle>
 
-        <VCardText>
-          <VTextField label="商品名稱" variant="outlined" density="compact" class="pb-3"
-            v-model="name.value.value" :error-messages="name.errorMessage.value"></VTextField>
-          <VTextField label="價格" variant="outlined" density="compact" type="number" min="0" class="pb-3"
-            v-model="price.value.value" :error-messages="price.errorMessage.value"></VTextField>
-          <VTextField label="商品數量" variant="outlined" density="compact" type="number" min="0" class="pb-3"
-            v-model="stock.value.value" :error-messages="stock.errorMessage.value"></VTextField>
-          <VSelect label="分類" variant="outlined" density="compact" :items="categories"
-            v-model="category.value.value" :error-messages="category.errorMessage.value"></VSelect>
-          <VCheckbox label="上架" density="compact"
-            v-model="sell.value.value" :error-messages="sell.errorMessage.value"></VCheckbox>
-          <VTextarea label="商品描述" variant="outlined" density="compact"
-            v-model="description.value.value" :error-messages="description.errorMessage.value"></VTextarea>
-          <VueFileAgent v-model="fileRecords" v-model:rawModelValue="rawFileRecords"
-            accept="image/jpeg,image/png" max-size="2MB" :error-text="{type: '檔案格式不支援，只接受 .jpeg .png', size: '檔案超過 2MB 大小限制'}"
-            deletable help-text="選擇商品圖片或拖曳到這裡" :max-files="1" ref="fileAgent"
-            ></VueFileAgent>
-        </VCardText>
+          <VCardText>
+            <VTextField label="商品名稱" variant="outlined" density="compact" class="pb-3"
+              v-model="name.value.value" :error-messages="name.errorMessage.value"></VTextField>
+            <VTextField label="價格" variant="outlined" density="compact" type="number" min="0" class="pb-3"
+              v-model="price.value.value" :error-messages="price.errorMessage.value"></VTextField>
+            <VTextField label="商品數量" variant="outlined" density="compact" type="number" min="0" class="pb-3"
+              v-model="stock.value.value" :error-messages="stock.errorMessage.value"></VTextField>
+            <VSelect label="分類" variant="outlined" density="compact" :items="categories"
+              v-model="category.value.value" :error-messages="category.errorMessage.value"></VSelect>
+            <VCheckbox label="上架" density="compact"
+              v-model="sell.value.value" :error-messages="sell.errorMessage.value"></VCheckbox>
+            <VTextarea label="商品描述" variant="outlined" density="compact"
+              v-model="description.value.value" :error-messages="description.errorMessage.value"></VTextarea>
+            <VueFileAgent v-model="fileRecords" v-model:rawModelValue="rawFileRecords"
+              accept="image/jpeg,image/png" max-size="2MB" :error-text="{type: '檔案格式不支援，只接受 .jpeg .png', size: '檔案超過 2MB 大小限制'}"
+              deletable help-text="選擇商品圖片或拖曳到這裡" :max-files="1" ref="fileAgent"
+              ></VueFileAgent>
+          </VCardText>
 
-        <VCardActions>
-          <VSpacer></VSpacer>
-          <VBtn color="secondary" rounded :disabled="isSubmitting" @click="closeDialog">取消</VBtn>
-          <VBtn color="primary" rounded type="submit" :loading="isSubmitting">送出</VBtn>
-        </VCardActions>
-      </VCard>
-    </VForm>
-  </VDialog>
-</div>
+          <VCardActions>
+            <VSpacer></VSpacer>
+            <VBtn color="secondary" rounded :disabled="isSubmitting" @click="closeDialog">取消</VBtn>
+            <VBtn color="primary" rounded type="submit" :loading="isSubmitting">送出</VBtn>
+          </VCardActions>
+        </VCard>
+      </VForm>
+    </VDialog>
+  </div>
 </template>
 <!-- ------------------------------------------- -->
 <script setup>
@@ -314,15 +315,15 @@ const tableProducts = ref([])
 // 欄位是固定的不用 ref，直接宣告，多語言就要寫成 computed
 // key 是後端回傳的資料 key，用 datatable 內建 :items 自動產生表格
 const tableHeaders = [
-  { title: '圖片', align: 'center', sortable: false, key: 'image' },
-  { title: '品名', align: 'center', sortable: true, key: 'name' },
-  { title: '價格', align: 'center', sortable: true, key: 'price' },
-  // { title: '說明', align: 'center', sortable: true, key: 'description' },
-  { title: '分類', align: 'center', sortable: true, key: 'category' },
-  { title: '庫存', align: 'center', sortable: true, key: 'stock' },
-  { title: '上架', align: 'center', sortable: true, key: 'sell' },
-  { title: '編輯', align: 'center', sortable: false, key: 'edit' }, // edit 資料庫中沒有這個欄位，自己新增的欄位
-  { title: '刪除', align: 'center', sortable: false, key: 'remove' } // delete 資料庫中沒有這個欄位，自己新增的欄位
+  { title: '圖片', sortable: false, key: 'image', align: 'center' },
+  { title: '品名', sortable: true, key: 'name' },
+  { title: '價格', sortable: true, key: 'price' },
+  // { title: '說明', sortable: true, key: 'description' },
+  { title: '分類', sortable: true, key: 'category' },
+  { title: '庫存', sortable: true, key: 'stock' },
+  { title: '上架', sortable: true, key: 'sell' },
+  { title: '編輯', sortable: false, key: 'edit', align: 'center' }, // edit 資料庫中沒有這個欄位，自己新增的欄位
+  { title: '刪除', sortable: false, key: 'remove', align: 'center' } // delete 資料庫中沒有這個欄位，自己新增的欄位
 ]
 // === 表格載入狀態
 const tableLoading = ref(true)
@@ -331,7 +332,7 @@ const tableItemsLength = ref(0)
 // === 表格搜尋文字
 const tableSearch = ref('')
 
-// ===== 表格重新載入資料函式，去後端撈資料
+// ===== 取得商品列表資料，並存入 tableProducts 陣列（表格重新載入資料也適用）
 const tableLoadItems = async () => {
   // --- 載入時顯示載入中
   tableLoading.value = true
@@ -346,8 +347,8 @@ const tableLoadItems = async () => {
         search: tableSearch.value
       }
     })
-    // --- 資料撈回來後，將資料放進 tableProducts
-    tableProducts.value.splice(0, tableProducts.value.length, ...data.result.data)
+    // --- 已排序＋分頁的資料撈回來後，把上次放入的全刪除，再把資料放進 tableProducts
+    tableProducts.value.splice(0, tableProducts.value.length, ...data.result.data) // data 是 axios 的 res 整個物件，result 是後端回傳的資料，裡面的 data 是商品資料，total 是全部資料數
     // --- 將全部資料數放進 tableItemsLength
     tableItemsLength.value = data.result.total
   } catch (error) {
@@ -367,7 +368,6 @@ const tableLoadItems = async () => {
   tableLoading.value = false
 }
 tableLoadItems()
-// ==============================================================
 
 // ===== 送出搜尋時 表格套用搜尋
 const tableApplySearch = () => {
@@ -376,6 +376,7 @@ const tableApplySearch = () => {
   // 重新載入資料
   tableLoadItems()
 }
+// ==============================================================
 </script>
 
 <!-- ------------------------------------------- -->

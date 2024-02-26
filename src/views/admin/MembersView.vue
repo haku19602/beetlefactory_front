@@ -1,13 +1,13 @@
 <template>
 <div style="height: 100%;" class="bg-back">
   <VContainer>
-    <VRow>
+    <VRow class="justify-center">
       <!-- ===== title -->
-      <VCol cols="12">
+      <VCol cols="12" lg="10">
         <h2 class="text-center mt-5 text-primary">會員列表</h2>
       </VCol>
       <!-- ===== 會員列表 -->
-      <VCol cols="10" class="mx-auto">
+      <VCol cols="12" lg="10">
         <VDataTableServer
           v-model:items-per-page="tableItemsPerPage"
           v-model:sort-by="tableSortBy"
@@ -19,7 +19,8 @@
           :search="tableSearch"
           @update:items-per-page="tableLoadItems"
           @update:sort-by="tableLoadItems"
-          @update:page="tableLoadItems" class="py-5 px-10 bg-back">
+          @update:page="tableLoadItems"
+          class="py-5 px-10 bg-back">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
             <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
@@ -29,7 +30,9 @@
           <!-- === 指定 avatar 欄位的顯示方式 -->
           <!-- [`item.key`]，插槽後面= 可以帶出它的資料，這裡解構出 key item -->
           <template #[`item.avatar`]="{ item }">
-            <VImg :src="item.avatar" height="30px" contain></VImg>
+            <VAvatar size="30">
+              <VImg :src="item.avatar" contain></VImg>
+            </VAvatar>
           </template>
           <!-- === 指定 role 欄位的顯示方式 -->
           <template #[`item.role`]="{ item }">

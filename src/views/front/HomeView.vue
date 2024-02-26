@@ -1,6 +1,6 @@
 <template>
   <VContainer style="height: 90%;">
-    <VRow class="justify-center align-center" style="height: 100%;" >
+    <VRow class="justify-center align-center h-100">
       <!-- ===== 紅色精靈 -->
       <VCol cols="12" lg="3" class="d-flex justify-center">
         <div class="red-square d-flex justify-space-evenly align-center bg-secondary">

@@ -94,7 +94,14 @@
                 <VTextarea prepend-icon="mdi-text" label="訂單備註" variant="outlined" density="compact" clearable auto-grow
                   v-model="note.value.value" :error-messages="note.errorMessage.value"></VTextarea>
               </VCol>
-                <!-- === 結帳按鈕，相當於送出運送資訊表單 -->
+                <!-- === 總計＋運費 -->
+              <VCol cols="12">
+                <p>總計：NT. <b class="text-h5 font-weight-bold">{{ total }}</b></p>
+                <p v-if="delivery.value.value === '黑貓'">運費：NT. <b class="text-h6 font-weight-bold">110</b></p>
+                <p v-if="delivery.value.value === '7-11 交貨便'">運費：NT. <b class="text-h6 font-weight-bold">70</b></p>
+                <p v-if="delivery.value.value === '面交'">運費：NT. <b class="text-h6 font-weight-bold">0</b></p>
+              </VCol>
+                <!-- === 結帳按鈕，相當於送出運送資訊表單，相當於 creat 訂單 -->
               <VCol cols="12">
                 <VBtn type="submit" color="primary" size="large" rounded append-icon="mdi-arrow-right-circle" :disabled="!canCheckout" :loading="isSubmitting">送出訂單</VBtn>
               </VCol>
@@ -313,15 +320,15 @@ const checkout = handleSubmit(async (values) => {
       text,
       showCloseButton: false,
       snackbarProps: {
-        timeout: 2000,
+        timeout: 3000,
         color: 'secondary',
         location: 'bottom'
       }
     })
-    // 重新整理頁面
+    // 重新整理頁面，讓使用者商品資訊更新
     setTimeout(() => {
       router.go(0)
-    }, 2000)
+    }, 3000)
   }
 })
 

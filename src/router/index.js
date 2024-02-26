@@ -100,7 +100,7 @@ const routes = [
       },
       {
         path: 'myorders',
-        name: 'Orders',
+        name: 'MyOrders',
         component: () => import('@/views/front/MyOrders.vue'),
         meta: {
           title: '甲蟲工廠 | 我的訂單',
@@ -110,10 +110,20 @@ const routes = [
       },
       {
         path: 'mylikes',
-        name: 'Likes',
+        name: 'MyLikes',
         component: () => import('@/views/front/MyLikes.vue'),
         meta: {
           title: '甲蟲工廠 | 我的收藏',
+          login: true,
+          admin: false
+        }
+      },
+      {
+        path: 'orders/:id',
+        name: 'Orders',
+        component: () => import('@/views/front/OrdersDetails.vue'),
+        meta: {
+          title: '甲蟲工廠 | 訂單明細',
           login: true,
           admin: false
         }
