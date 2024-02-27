@@ -8,6 +8,7 @@ import { useApi } from '@/composables/axios'
 export const useUserStore = defineStore('user', () => {
   const { apiAuth } = useApi()
 
+  // === 定義 user store 收的資料
   const token = ref('')
   const account = ref('')
   const email = ref('')
@@ -27,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
     role.value = data.role
     avatar.value = data.avatar
     // 把後端回應的 likes 陣列轉換成商品 id 的陣列。原本是 likes: [{ product: '_id' }]，變成 likes: ['_id']
-    data.likes = data.likes.map((item) => item.product)
+    // data.likes = data.likes.map((item) => item.product)
     likes.value = data.likes
   }
 
@@ -47,7 +48,7 @@ export const useUserStore = defineStore('user', () => {
       // data 是後端 '/users/me' 的回應，也就是後端 getProfile 的回應，裡面有使用者資料
       const { data } = await apiAuth.get('/users/me')
       // 把後端回應的 likes 陣列轉換成商品 id 的陣列。原本是 likes: [{ product: '_id' }]，變成 likes: ['_id']
-      data.result.likes = data.result.likes.map((item) => item.product)
+      // data.result.likes = data.result.likes.map((item) => item.product) // 這行不需要，改成後端處理過了
       login(data.result)
     } catch (error) {
       logout()
