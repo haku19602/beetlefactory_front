@@ -4,7 +4,7 @@
     <VRow class="justify-center">
       <!-- ===== title -->
       <VCol cols="12" lg="10">
-        <h2 class="text-center mt-5 text-primary">會員列表</h2>
+        <h2 class="text-center mt-10 text-primary">會員列表</h2>
       </VCol>
       <!-- ===== 會員列表 -->
       <VCol cols="12" lg="10">
@@ -23,8 +23,8 @@
           class="py-5 px-10 bg-back">
           <!-- === 上方插槽 放搜尋功能 -->
           <template #top>
-            <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
-              @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
+            <VTextField label="搜尋" prepend-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
+              @keydown.enter="tableApplySearch">
             </VTextField>
           </template>
           <!-- === 指定 avatar 欄位的顯示方式 -->
@@ -228,8 +228,6 @@ const remove = async () => {
 const submit = handleSubmit(async (values) => { // values 是表單各個欄位的值
   // 如果 圖片上傳有錯誤，就不送出  // 沒上傳圖片就沒有 value[0]，value[0] 是 undefined，undefined 沒有 .error 所以要用 ?. 避免錯誤
   if (fileRecords.value[0]?.error) return
-  // 如果 新增商品時，沒有選擇圖片，就不送出（編輯商品時，可以不選擇圖片）
-  if (dialogId.value === '' && fileRecords.value.length === 0) return
 
   try {
     // === 檔案上傳要用 FormData 物件，不是一般的 JSON 物件

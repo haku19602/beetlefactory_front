@@ -279,7 +279,15 @@ const schema = yup.object({
 // 2.=== 先 useForm -> 表單驗證方式綁定 schema
 // handleSubmit 表單送出時的處理函式；isSubmitting 是否正在送出
 const { handleSubmit, isSubmitting } = useForm({
-  validationSchema: schema
+  validationSchema: schema,
+  initialValues: {
+    // --- 初始值設定
+    name: '',
+    phone: '',
+    delivery: '',
+    address: '',
+    note: ''
+  }
 })
 // 3.=== 再 useField -> 綁定表單欄位 -> 表單 DOM 使用 v-model 綁定自訂義驗證 schema 的 xx 欄位驗證
 // 要跟上面 schema 的名稱對到，例如 'name'

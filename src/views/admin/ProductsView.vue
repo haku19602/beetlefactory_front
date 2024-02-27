@@ -4,7 +4,7 @@
       <VRow class="justify-center">
         <!-- ===== title -->
         <VCol cols="12" lg="10">
-          <h2 class="text-center mt-5 text-primary">商品列表</h2>
+          <h2 class="text-center mt-10 text-primary">商品列表</h2>
         </VCol>
         <!-- ===== 新增商品按鈕 -->
         <VCol cols="12" lg="10" class="text-end">
@@ -27,8 +27,8 @@
             class="py-5 px-10 bg-back">
             <!-- === 上方插槽 放搜尋功能 -->
             <template #top>
-              <VTextField label="搜尋" append-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
-                @click:append-inner="tableApplySearch" @keydown.enter="tableApplySearch">
+              <VTextField label="搜尋" prepend-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
+                @keydown.enter="tableApplySearch">
               </VTextField>
             </template>
             <!-- === 指定 image 欄位的顯示方式 -->
@@ -112,11 +112,11 @@
 <!-- ------------------------------------------- -->
 <script setup>
 import { ref } from 'vue'
+import { useApi } from '@/composables/axios'
+import { useSnackbar } from 'vuetify-use-dialog'
 // 表單驗證套件
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
-import { useApi } from '@/composables/axios'
-import { useSnackbar } from 'vuetify-use-dialog'
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
