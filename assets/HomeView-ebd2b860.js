@@ -1,1 +1,0 @@
-import{_ as e,a1 as o,a2 as t,a9 as s}from"./index-46534e73.js";const c={},a={style:{background:"#F8F4EB",height:"100%"}},n=s("h1",null,"admin home",-1),_=[n];function r(d,i){return o(),t("div",a,_)}const l=e(c,[["render",r]]);export{l as default};
