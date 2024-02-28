@@ -1,6 +1,16 @@
 <template>
   <VContainer style="height: 90%;">
-    <VRow class="justify-center align-center h-100">
+    <VRow class="justify-center align-center h-100 flex-lg-row-reverse">
+
+      <!-- ===== 主視覺 -->
+      <VCol cols="12" lg="7" class="d-flex justify-center align-center">
+        <div class="key_vision">
+          <img src="@//assets/kv_beetle.png" class="kv_beetle">
+          <img src="@//assets/kv_redbeetle.png" class="kv_redbeetle">
+          <img src="@//assets/kv_factory.png" class="kv_factory">
+          <div class="o bg-secondary2"></div>
+        </div>
+      </VCol>
       <!-- ===== 紅色精靈 -->
       <VCol cols="12" lg="3" class="d-flex justify-center">
         <div class="red-square d-flex justify-space-evenly align-center bg-secondary">
@@ -10,15 +20,6 @@
           <div class="eyes-white bg-back">
             <div class="eyes-black"></div>
           </div>
-        </div>
-      </VCol>
-      <!-- ===== 主視覺 -->
-      <VCol cols="12" lg="7" class="d-flex justify-center align-center">
-        <div class="key_vision">
-          <img src="@//assets/kv_beetle.png" class="kv_beetle">
-          <img src="@//assets/kv_redbeetle.png" class="kv_redbeetle">
-          <img src="@//assets/kv_factory.png" class="kv_factory">
-          <div class="o bg-secondary2"></div>
         </div>
       </VCol>
     </VRow>
@@ -43,7 +44,8 @@ onMounted(() => {
   // ===== O 彈跳動畫
   gsap.from('.o', {
     bottom: '85px',
-    duration: 1,
+    height: '100px',
+    duration: 0.8,
     repeat: -1,
     yoyo: true
   })
@@ -51,34 +53,34 @@ onMounted(() => {
   gsap.from('.kv_beetle', {
     top: '-250px',
     opacity: 0,
-    duration: 2
+    duration: 1.6
   })
   // ===== factory 動畫
   gsap.from('.kv_factory', {
     bottom: '-250px',
     opacity: 0,
-    duration: 2
+    duration: 1.6
   })
 })
 </script>
 
 <style lang="scss" scoped>
 .red-square{
-  width: 260px;
-  height: 330px;
+  width: 220px;
+  height: 280px;
   border-radius: 50px;
 }
 .eyes-white{
-  width: 85px;
-  height: 60px;
+  width: 80px;
+  height: 55px;
   border-radius: 50%;
   // ---
   position: relative;
 
 }
 .eyes-black{
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 100%;
   background: #333;
   // ---
@@ -114,6 +116,5 @@ onMounted(() => {
   position: absolute;
   left: 360px;
   bottom: 140px;
-
 }
 </style>
