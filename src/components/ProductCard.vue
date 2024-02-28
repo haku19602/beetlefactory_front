@@ -1,31 +1,34 @@
 <template>
   <!-- ================ 商品卡片元件 -->
-  <VCard flat="0" rounded="md" class="product-card" color="back">
-    <!-- === 商品圖片 -->
-    <RouterLink :to="'/products/' + _id">
-      <!-- aspect-ratio="1" 寬度是高度的 1倍 -->
-      <VImg :src="image" cover aspect-ratio="1">
-        <VOverlay :model-value="stock === 0" contained persistent class="align-center justify-center text-center" opacity="0.5">
-          <h2 class="text-back sold-out pa-5">SOLD<br>OUT</h2>
-        </VOverlay>
-      </VImg>
-    </RouterLink>
-    <!-- === 商品名稱、分類 -->
-    <VCardText class="d-flex justify-space-between pb-1">
-      {{ name }}<VChip density="comfortable" variant="outlined" color="primary">{{ category }}</VChip>
-    </VCardText>
-    <!-- === 商品價格 -->
-    <VCardSubtitle>NT. {{ price }}</VCardSubtitle>
-    <!-- === 分隔線----------------------- -->
-    <v-divider class="mx-3 mt-3"></v-divider>
-    <!-- === 加入購物車、收藏 -->
-    <VCardActions>
-      <VBtn prepend-icon="mdi-cart" color="primary" rounded @click="addCart" :disabled="stock <= 0">加入購物車</VBtn>
-      <v-spacer></v-spacer>
-      <VBtn v-if="isLike" icon="mdi-heart" density="comfortable" color="secondary" @click="addLike"></VBtn>
-      <VBtn v-else icon="mdi-heart-outline" density="comfortable" color="secondary" @click="addLike"></VBtn>
-    </VCardActions>
-  </VCard>
+  <VHover v-slot="{ isHovering, props }">
+    <VCard flat="0" rounded="md" color="back" class="d-flex flex-column">
+      <!-- === 商品圖片 -->
+      <RouterLink :to="'/products/' + _id" class="text-decoration-none d-flex">
+        <!-- aspect-ratio="1" 寬度是高度的 1倍 -->
+        <VImg :src="image" cover aspect-ratio="1"
+          :class="{ 'on-hover': isHovering }" v-bind="props">
+          <VOverlay :model-value="stock === 0" contained persistent class="align-center justify-center text-center" opacity="0.5">
+            <h2 class="text-back sold-out pa-5">SOLD<br>OUT</h2>
+          </VOverlay>
+        </VImg>
+      </RouterLink>
+      <!-- === 商品名稱、分類 -->
+      <VCardText class="d-flex justify-space-between pb-1">
+        {{ name }}<VChip density="comfortable" variant="outlined" color="primary">{{ category }}</VChip>
+      </VCardText>
+      <!-- === 商品價格 -->
+      <VCardSubtitle>NT. {{ price }}</VCardSubtitle>
+      <!-- === 分隔線----------------------- -->
+      <v-divider class="mx-3 mt-3"></v-divider>
+      <!-- === 加入購物車、收藏 -->
+      <VCardActions>
+        <VBtn prepend-icon="mdi-cart" color="primary" rounded @click="addCart" :disabled="stock <= 0">加入購物車</VBtn>
+        <v-spacer></v-spacer>
+        <VBtn v-if="isLike" icon="mdi-heart" density="comfortable" color="secondary" @click="addLike"></VBtn>
+        <VBtn v-else icon="mdi-heart-outline" density="comfortable" color="secondary" @click="addLike"></VBtn>
+      </VCardActions>
+    </VCard>
+  </VHover>
 </template>
 
 <script setup>
@@ -137,5 +140,12 @@ const addLike = async () => {
 .sold-out{
   border: 2px solid;
   border-radius: 15px;
+}
+.v-img {
+  opacity: 0.6;
+  transition: opacity .3s ease-in-out;
+  &:not(.on-hover) {
+    opacity: 1;
+  }
 }
 </style>
