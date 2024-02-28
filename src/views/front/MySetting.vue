@@ -11,8 +11,8 @@
           </VCard>
         </VCol>
 
-        <VCol cols="8" sm="7" md="9" lg="4">
-          <VAvatar :image="user.avatar" size="300"></VAvatar>
+        <VCol cols="8" sm="7" md="9" lg="4" class="text-center">
+          <VAvatar :image="user.avatar" size="260"></VAvatar>
           <VBtn icon="mdi-pencil" size="x-small" color="primary" style="vertical-align: bottom;" @click="openDialog"></VBtn>
           <h2 class="text-primary">{{ user.account }}</h2>
           <h3 class="text-primary">{{ user.email }}</h3>
