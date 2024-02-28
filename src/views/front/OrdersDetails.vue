@@ -46,8 +46,8 @@
         <VCol cols="6" md="4"> {{ order.delivery }}</VCol>
         <VCol cols="6" md="2" class="text-grey-darken-1 ps-5">收件地址：</VCol>
         <VCol cols="6" md="4"> {{ order.address }}</VCol>
-        <VCol cols="6" md="4" class="text-grey-darken-1 ps-5">訂單備註：</VCol>
-        <VCol cols="6" md="8"> {{ order.note }}</VCol>
+        <VCol cols="6" md="2" class="text-grey-darken-1 ps-5">訂單備註：</VCol>
+        <VCol cols="6" md="10"> {{ order.note }}</VCol>
 
         <!-- ===== 訂單商品 -->
         <VCol cols="12">
