@@ -88,7 +88,11 @@ const isLike = computed(() => {
 // ==================== 前端表單驗證 ====================
 // 1.=== 定義表單驗證規則
 const schema = yup.object({
-  quantity: yup.number().typeError('數量格式錯誤').required('缺少數量').min(1, '數量最小為 1') // 表單只有一個數量欄位
+  quantity: yup
+    .number()
+    .typeError('數量格式錯誤')
+    .required('缺少數量')
+    .min(1, '數量最小為 1') // 表單只有一個數量欄位
 })
 // 2.=== 先用 useForm 綁定表單使用自訂驗證 schema，並給予表單初始值
 const { isSubmitting, handleSubmit } = useForm({
