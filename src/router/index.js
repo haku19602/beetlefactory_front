@@ -49,6 +49,36 @@ const routes = [
         }
       },
       {
+        path: 'bookbaby',
+        name: 'Bookbaby',
+        component: () => import('@/views/front/BookBaby.vue'),
+        meta: {
+          title: '飼養攻略｜幼蟲',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'bookadult',
+        name: 'Bookadult',
+        component: () => import('@/views/front/BookAdult.vue'),
+        meta: {
+          title: '飼養攻略｜成蟲',
+          login: false,
+          admin: false
+        }
+      },
+      {
+        path: 'bookdead',
+        name: 'Bookdead',
+        component: () => import('@/views/front/BookDead.vue'),
+        meta: {
+          title: '飼養攻略｜標本',
+          login: false,
+          admin: false
+        }
+      },
+      {
         path: 'shop',
         name: 'Shop',
         component: () => import('@/views/front/ShopView.vue'),
