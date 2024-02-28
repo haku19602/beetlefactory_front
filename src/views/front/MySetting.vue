@@ -113,12 +113,10 @@ import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
-import { useRouter } from 'vue-router'
 
 const user = useUserStore()
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
-const router = useRouter()
 
 const items = [
   { to: '/mysetting', text: '會員設定', icon: 'mdi-cog' },
@@ -223,11 +221,7 @@ const submit = handleSubmit(async (values) => {
     console.log(values)
 
     // 更新 user store 的資料
-    user.account = account.value.value
-    user.email = email.value.value
-    user.name = name.value.value
-    user.phone = phone.value.value
-    user.address = address.value.value
+    user.getProfile()
 
     createSnackbar({
       text: '編輯成功',
@@ -235,7 +229,7 @@ const submit = handleSubmit(async (values) => {
       snackbarProps: {
         timeout: 2000,
         color: 'back',
-        location: 'bottom'
+        location: 'center'
       }
     })
     isEditing.value = false
@@ -248,7 +242,7 @@ const submit = handleSubmit(async (values) => {
       snackbarProps: {
         timeout: 2000,
         color: 'secondary',
-        location: 'bottom'
+        location: 'center'
       }
     })
   }
@@ -276,10 +270,8 @@ const editAvatar = async () => {
     await apiAuth.patch('/users/avatar', fd)
 
     // 更新 user store 的 avatar
-    // if (fileRecords.value.length > 0) {
-    //   user.avatar = fileRecords.value[0].file.path
-    // }
-    router.go(0) // 重新整理頁面
+    user.getProfile()
+
     createSnackbar({
       text: '編輯成功',
       showCloseButton: false,
