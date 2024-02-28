@@ -139,9 +139,9 @@ import { useForm, useField } from 'vee-validate'
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
-// ===== 表單對話框正在編輯的訂單 ID
+// ===== 更改訂單狀態對話框 正在編輯的訂單 ID
 const dialogId = ref('')
-// ===== 付款對話框的開啟狀態
+// ===== 更改訂單狀態對話框 的開啟狀態
 const dialog = ref(false)
 
 // ===== 打開 更改訂單狀態對話框 function
@@ -180,7 +180,6 @@ const shipped = useField('shipped')
 // ===== 更改訂單付款、出貨狀態 function
 const update = handleSubmit(async () => {
   try {
-    // const { data } =
     await apiAuth.patch('/orders/' + dialogId.value, {
       paid: paid.value.value,
       shipped: shipped.value.value

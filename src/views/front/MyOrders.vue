@@ -1,12 +1,17 @@
 <template>
   <div style="height: 100%;" class="bg-back">
     <VContainer>
-      <VRow>
-        <VCol>
-          <h2 class="text-center mt-5 text-primary">我的訂單</h2>
+      <VRow class="justify-center pt-10">
+        <!-- ===== 選擇項目！！！ -->
+        <VCol cols="5" sm="4" md="3" lg="2">
+          <VCard class="mx-auto" width="200" flat="0">
+            <VList density="compact" class="bg-back">
+                <VListItem v-for="(item, i) in items" :key="i" :to="item.to" :prepend-icon="item.icon" :title="item.text" color="primary" rounded="xl"></VListItem>
+            </VList>
+          </VCard>
         </VCol>
 
-        <VCol cols="12">
+        <VCol cols="12" sm="8" md="9" lg="10">
           <!-- :items="orders" 綁定表格每個項目從 orders 陣列來 -->
           <!-- :headers="headers" 綁定表格的標題 -->
           <VDataTable
@@ -64,34 +69,126 @@
             <!-- === 完成訂單顯示 -->
             <template #[`item.done`]="{ item }">
               <VBtn
-                color="primary" variant="flat" rounded
-                :disabled="item.done || !item.paid">
-                {{ item.done ? '訂單已完成' : '完成訂單' }}
+                :color="item.done ? 'primary' : 'secondary'" class="text-back" variant= "flat" rounded :elevation="item.done ? '0' : '5'"
+                :disabled="item.done || !item.paid || !item.shipped" :append-icon="item.done ? 'mdi-check' : ''"
+                @click="openDialog(item)">
+                {{ item.done ? '已完成' : '完成訂單' }}
               </VBtn>
             </template>
             <!-- === 下方插槽 放分頁功能 -->
             <template #bottom>
               <div class="text-center pt-2">
-                <v-pagination
+                <VPagination
+                  v-model="tablePage"
+                  :length="pages"
+                  rounded="circle"
+                ></VPagination>
+
+                <!-- <v-pagination
                   v-model="tablePage"
                   :length="2"
-                ></v-pagination>
+                ></v-pagination> -->
               </div>
             </template>
           </VDataTable>
         </VCol>
       </VRow>
     </VContainer>
+
+    <!-- ===== 完成訂單確認視窗 -->
+    <VDialog v-model="dialog" width="350px">
+    <VCard rounded="xl">
+      <VIcon icon="mdi-alert-circle" color="secondary" size="50" class="ma-auto mt-5"></VIcon>
+      <VCardText>確定完成訂單「{{ dialogId }}」嗎？此動作無法復原！</VCardText>
+      <VCardActions>
+        <VSpacer></VSpacer>
+        <VBtn color="secondary" rounded @click="closeDialog">取消</VBtn>
+        <VBtn color="primary" rounded @click="update">完成訂單</VBtn>
+      </VCardActions>
+    </VCard>
+    </VDialog>
   </div>
 </template>
 <!-- --------------------------------------------------------------------------- -->
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
+// // 表單驗證套件
+// import * as yup from 'yup'
+// import { useForm, useField } from 'vee-validate'
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
+
+const items = [
+  { to: '/mysetting', text: '會員設定', icon: 'mdi-cog' },
+  { to: '/mylikes', text: '我的收藏', icon: 'mdi-heart' },
+  { to: '/myorders', text: '我的訂單', icon: 'mdi-list-box' }
+]
+
+// ===== 更改訂單狀態對話框 正在編輯的訂單 ID
+const dialogId = ref('')
+// ===== 更改訂單狀態對話框 的開啟狀態
+const dialog = ref(false)
+
+// ===== 打開 更改訂單狀態對話框 function
+const openDialog = (item) => {
+  dialogId.value = item._id // 正在編輯的訂單 ID
+  dialog.value = true // 開啟對話框
+}
+
+// ===== 關閉 更改訂單狀態對話框 function
+const closeDialog = () => {
+  dialog.value = false // 關閉對話框
+}
+
+// ===== 確認完成訂單 function
+const update = async () => {
+  try {
+    await apiAuth.patch('/orders/' + dialogId.value, { done: true })
+    closeDialog() // 關閉對話框
+    tableLoadItems() // 重新載入訂單資料
+    createSnackbar({
+      text: '訂單已完成',
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 2000,
+        color: 'success',
+        location: 'bottom'
+      }
+    })
+  } catch (error) {
+    const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
+    createSnackbar({
+      text,
+      showCloseButton: false,
+      snackbarProps: {
+        timeout: 2000,
+        color: 'secondary',
+        location: 'bottom'
+      }
+    })
+  }
+}
+
+// // ============================= 前端 更改訂單狀態 表單驗證 =============================
+// // 1.=== 定義表單驗證規則
+// const schema = yup.object({
+//   done: yup.boolean()
+// })
+// // 2.=== 先 useForm -> 表單驗證方式綁定 schema
+// // handleSubmit 表單送出時的處理函式；isSubmitting 是否正在送出
+// const { handleSubmit, isSubmitting } = useForm({
+//   validationSchema: schema,
+//   initialValues: {
+//     done: false
+//   }
+// })
+// // 3.=== 再 useField -> 綁定表單欄位 -> 表單 DOM 使用 v-model 綁定自訂義驗證 schema 的 xx 欄位驗證
+// // 要跟上面 schema 的名稱對到，例如 'name'
+// const done = useField('done')
+// =================================================================================
 
 // ==================================== 訂單列表 ====================================
 // ===== 用來儲存訂單資料
@@ -109,11 +206,11 @@ const tablePage = ref(1)
 // key 是後端回傳的資料 key，用 datatable 內建 :items 自動產生表格
 const headers = [
   { title: '訂單編號', sortable: false, key: '_id' },
-  { title: '訂購日期', sortable: true, key: 'createdAt' },
+  { title: '訂購日期', sortable: false, key: 'createdAt' },
   // { title: '訂單商品', sortable: false, key: 'cart' },
   {
     title: '訂單金額',
-    sortable: true,
+    sortable: false,
     key: 'price', // 後端沒有 price 欄位，是自己新增計算來的
     align: 'center',
     value: (item) => {
@@ -129,27 +226,36 @@ const headers = [
       }
     }
   },
-  { title: '付款狀態', sortable: true, key: 'paid', align: 'center' },
-  { title: '出貨狀態', sortable: true, key: 'shipped', align: 'center' },
-  { title: '完成訂單', sortable: true, key: 'done', align: 'center' }
+  { title: '付款狀態', sortable: false, key: 'paid', align: 'center' },
+  { title: '出貨狀態', sortable: false, key: 'shipped', align: 'center' },
+  { title: '完成訂單', sortable: false, key: 'done', align: 'center' }
 ]
 // === 表格載入狀態 -> 用來顯示載入中
 const tableLoading = ref(true)
 // === 表格全部資料數 -> 用來計算分頁數
 const tableItemsLength = ref(0)
-
+// === 表格總頁數
+const pages = ref(1)
+// -------------------------------------------------------------------------------------------------------------------------
 // ===== 取得訂單資料，並存入 orders 陣列
-onMounted(async () => {
+const tableLoadItems = async () => {
   // --- 載入時顯示載入中
-  tableLoading.value = true
+  // tableLoading.value = true
 
   try {
     const { data } = await apiAuth.get('/orders')
-    // 處理分頁
+    // --- 處理分頁
+    // 取資料總數
     tableItemsLength.value = data.result.length
-    const newOrders = data.result.slice((tablePage.value - 1) * 5, tablePage.value * 5)
 
-    orders.value.push(...newOrders) // data 是 axios 的 res 整個物件，result 是後端回傳的資料
+    // 從所有資料陣列擷取第x頁資料陣列
+    orders.value = data.result.slice((tablePage.value - 1) * 5, tablePage.value * 5)
+
+    // 重新計算分頁數
+    pages.value = Math.ceil(tableItemsLength.value / 5)
+
+    // --- 已排序＋分頁的資料放進 orders 陣列
+    // orders.value.push(...newOrders)
   } catch (error) {
     const text = error?.response?.data?.message || '發生錯誤，請稍後再試'
     createSnackbar({
@@ -164,7 +270,8 @@ onMounted(async () => {
   }
   // --- 載入完成後關閉載入中
   tableLoading.value = false
-})
+}
+tableLoadItems()
 
 // ===== 取得訂單資料，並存入 orders 陣列
 // const tableLoadItems = async () => {
