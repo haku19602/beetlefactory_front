@@ -296,6 +296,11 @@ const phone = useField('phone')
 const delivery = useField('delivery')
 const address = useField('address')
 const note = useField('note')
+
+name.value.value = user.name
+phone.value.value = user.phone
+address.value.value = user.address
+
 // ====================================================
 
 // ===== 結帳 function
