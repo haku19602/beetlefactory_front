@@ -16,6 +16,9 @@ export const useUserStore = defineStore('user', () => {
   const role = ref(UserRole.USER)
   const avatar = ref('')
   const likes = ref([]) // likes 清單陣列
+  const name = ref('')
+  const phone = ref('')
+  const address = ref('')
 
   // === login 登入時修改成登入時傳入的資料
   const login = (data) => {
@@ -30,6 +33,9 @@ export const useUserStore = defineStore('user', () => {
     // 把後端回應的 likes 陣列轉換成商品 id 的陣列。原本是 likes: [{ product: '_id' }]，變成 likes: ['_id']
     // data.likes = data.likes.map((item) => item.product)
     likes.value = data.likes
+    name.value = data.name
+    phone.value = data.phone
+    address.value = data.address
   }
 
   // === isLogin 判斷是否登入狀態
@@ -64,6 +70,9 @@ export const useUserStore = defineStore('user', () => {
     role.value = UserRole.USER
     avatar.value = ''
     likes.value = []
+    name.value = ''
+    phone.value = ''
+    address.value = ''
   }
 
   return {
@@ -74,6 +83,9 @@ export const useUserStore = defineStore('user', () => {
     role,
     avatar,
     likes,
+    name,
+    phone,
+    address,
     login,
     logout,
     isLogin,

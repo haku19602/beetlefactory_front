@@ -99,6 +99,7 @@
 <script setup>
 import { ref } from 'vue'
 // 表單驗證套件
+import validator from 'validator'
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
 import { useApi } from '@/composables/axios'
@@ -167,8 +168,11 @@ const schema = yup.object({
     .max(20, '帳號名稱最多 20 字'),
   email: yup
     .string()
-    // .typeError('信箱格式錯誤')
-    .required('缺少使用者信箱'),
+    .required('使用者信箱必填')
+    // .test(自訂驗證名稱, 錯誤訊息, 驗證function)
+    .test('isEmail', '信箱格式錯誤', (value) => {
+      return validator.isEmail(value)
+    }),
   role: yup
     .number()
     .required('缺少使用者角色')
@@ -179,7 +183,7 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({ // handleSubmit 表�
   // --- 初始值設定
   initialValues: {
     account: '',
-    email: 0,
+    email: '',
     role: 0
   }
 })

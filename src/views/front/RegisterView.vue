@@ -46,11 +46,8 @@ import { ref } from 'vue'
 import validator from 'validator'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
-// 路由
 import { useRouter } from 'vue-router'
-// 提示訊息
 import { useSnackbar } from 'vuetify-use-dialog'
-// api composables
 import { useApi } from '@/composables/axios'
 
 const { api } = useApi()

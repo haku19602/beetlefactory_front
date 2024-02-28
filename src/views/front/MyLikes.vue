@@ -4,7 +4,7 @@
       <VRow class="justify-center pt-10">
         <!-- ===== 選擇項目！！！ -->
         <VCol cols="5" sm="4" md="3" lg="2">
-          <VCard class="mx-auto " max-width="300" flat="0">
+          <VCard class="mx-auto" width="200" flat="0">
             <VList density="compact" class="bg-back">
                 <VListItem v-for="(item, i) in items" :key="i" :to="item.to" :prepend-icon="item.icon" :title="item.text" color="primary" rounded="xl"></VListItem>
             </VList>
