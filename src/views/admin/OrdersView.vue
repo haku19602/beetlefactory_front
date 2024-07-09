@@ -24,12 +24,12 @@
             @update:sort-by="tableLoadItems"
             @update:page="tableLoadItems"
             class="py-5 px-10 bg-back">
-            <!-- === 上方插槽 放搜尋訂單編號功能，暫時失敗 -->
-            <!-- <template #top>
+            <!-- === 上方插槽 放搜尋訂單編號功能 -->
+            <template #top>
               <VTextField label="請搜尋訂單編號" prepend-inner-icon="mdi-magnify" v-model="tableSearch" variant="underlined"
                 @click:prepend-inner="tableApplySearch" @keydown.enter="tableApplySearch">
               </VTextField>
-            </template> -->
+            </template>
             <!-- === 指定 avatar 欄位的顯示方式 -->
             <template #[`item.user.avatar`]="{ item }">
               <VAvatar size="35">
